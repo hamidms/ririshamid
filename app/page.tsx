@@ -1,65 +1,114 @@
-import Image from "next/image";
+"use client";
+
+import { useState } from "react";
+import { Canvas } from "@react-three/fiber";
+import { OrbitControls, OrthographicCamera } from "@react-three/drei";
+import { Suspense } from "react";
+
+import BookModel from "@/components/BookModel";
+import SunflowerModel from "@/components/SunflowerModel";
+import ShoesModel from "@/components/ShoesModel";
+import HeelsModel from "@/components/HeelsModel";
+import HeadphoneModel from "@/components/HeadphoneModel";
+import PhoneModel from "@/components/PhoneModel";
+import CalendarModel from "@/components/CalendarModel";
+import RingModel from "@/components/RingModel";
+import GrassModel from "@/components/GrassModel";
+
+import CalendarModalBox from "@/components/CalendarModalBox";
+import BookModalBox from "@/components/BookModalBox";
+import PhoneModalBox from "@/components/PhoneModalBox";
 
 export default function Home() {
+  const [activeModel, setActiveModel] = useState<string | null>(null);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
+    <main style={{ width: "100vw", height: "100vh", backgroundColor: "#afafaf", position: "relative" }}>
+      <Canvas>
+        <OrthographicCamera makeDefault position={[12, 12, 12]} zoom={110} near={0.1} far={1000} />
+        
+        <ambientLight intensity={0.9} />
+        <directionalLight position={[10, 15, 10]} intensity={1.8} />
+
+        <Suspense fallback={null}>
+          
+          <group position={[0, -3, 0]}>
+            <GrassModel />
+          </group>
+
+          {/* Mengirimkan fungsi pop-up unik ke tiap model */}
+          <group position={[0.1, -2, 0.2]} rotation={[0, 1.5, 0]}>
+            <ShoesModel onSelect={() => setActiveModel("Koleksi Sepatu Sneaker")} />
+          </group>
+
+          <group position={[-1, -2.3, 0.2]} rotation={[0, -0.4, 0]}>
+            <HeelsModel onSelect={() => setActiveModel("High Heels Merah")} />
+          </group>
+
+          <group position={[1.8, -2, -1]} rotation={[0, -0.5, 0]}>
+            <BookModel onSelect={() => setActiveModel("Book")} />
+          </group>
+
+          <group position={[1.8, -2.2, 0.5]} rotation={[Math.PI / 2, 3, Math.PI / 3]}>
+            <PhoneModel onSelect={() => setActiveModel("Phone")} />
+          </group>
+
+          <group position={[0, -2.4, -1.2]}>
+            <SunflowerModel onSelect={() => setActiveModel("Tanaman Bunga Matahari")} />
+          </group>
+
+          <group position={[-1, -2, 0.5]} rotation={[0, 0, 1.5]}>
+            <HeadphoneModel onSelect={() => setActiveModel("Headphone Audio Pro")} />
+          </group>
+
+          <group position={[-2, -2.3, 1.5]} rotation={[0, 1, 0]}>
+            <CalendarModel onSelect={() => setActiveModel("Calendar")} />
+          </group>
+
+          <group position={[0.4, -2.3, 1]} rotation={[0, 0, 0]}>
+            <RingModel onSelect={() => setActiveModel("Cincin Aksesoris Emas")} />
+          </group>
+
+        </Suspense>
+
+        <OrbitControls 
+          enableDamping 
+          dampingFactor={0.15}
+          minZoom={50}
+          maxZoom={250}
+          maxPolarAngle={Math.PI / 1} 
         />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+      </Canvas>
+
+{/* PANGGIL MODAL SEPARASI DI SINI */}
+      <CalendarModalBox 
+        isOpen={activeModel === "Calendar"} 
+        onClose={() => setActiveModel(null)} 
+      />
+
+      <BookModalBox 
+        isOpen={activeModel === "Book"} 
+        onClose={() => setActiveModel(null)} 
+      />
+
+      <PhoneModalBox 
+        isOpen={activeModel === "Phone"} 
+        onClose={() => setActiveModel(null)} 
+      />
+
+      {/* DEFAULT POPUP UTK OBJEK SELAIN KALENDER (Jika Masih Perlu) */}
+      {activeModel && activeModel !== "Calendar" && (
+        console.log("Active Model:", activeModel), // Debugging: Log model yang aktif
+        <div style={{
+          position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
+          width: "85vw", maxWidth: "1000px", height: "80vh", maxHeight: "600px",
+          backgroundColor: "#fbf9f5", color: "#333", padding: "40px", borderRadius: "16px",
+          boxShadow: "0 20px 50px rgba(0,0,0,0.3)", zIndex: 100
+        }}>
+          <button onClick={() => setActiveModel(null)} style={{ position: "absolute", top: "20px", right: "20px", cursor: "pointer" }}>✕</button>
+          <h1>Detail Objek: {activeModel}</h1>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      )}
+    </main>
   );
 }

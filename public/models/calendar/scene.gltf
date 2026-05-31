@@ -1,0 +1,772 @@
+{
+  "accessors": [
+    {
+      "bufferView": 2,
+      "componentType": 5126,
+      "count": 2168,
+      "max": [
+        0.028264550492167473,
+        0.0042841206304728985,
+        0.062759168446064
+      ],
+      "min": [
+        -0.028526445850729942,
+        -0.004289435222744942,
+        0.05419081076979637
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 26016,
+      "componentType": 5126,
+      "count": 2168,
+      "max": [
+        0.9618858695030212,
+        0.9974283576011658,
+        0.9890702962875366
+      ],
+      "min": [
+        -0.9618862867355347,
+        -0.9971880316734314,
+        -0.9890799522399902
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "componentType": 5126,
+      "count": 2168,
+      "max": [
+        1.0,
+        0.9998826384544373,
+        0.9999985694885254,
+        1.0
+      ],
+      "min": [
+        -1.0,
+        -0.9998821020126343,
+        -0.9994238615036011,
+        -1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "componentType": 5126,
+      "count": 2168,
+      "max": [
+        0.7899320125579834,
+        0.7899319529533386
+      ],
+      "min": [
+        0.36761561036109924,
+        0.3997021019458771
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 17344,
+      "componentType": 5126,
+      "count": 2168,
+      "max": [
+        0.7899320125579834,
+        0.7899319529533386
+      ],
+      "min": [
+        0.36761561036109924,
+        0.3997021019458771
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 34688,
+      "componentType": 5126,
+      "count": 2168,
+      "max": [
+        0.7899320125579834,
+        0.7899319529533386
+      ],
+      "min": [
+        0.36761561036109924,
+        0.3997021019458771
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "componentType": 5125,
+      "count": 9780,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 52032,
+      "componentType": 5126,
+      "count": 568,
+      "max": [
+        0.030000001192092896,
+        0.017398379743099213,
+        0.05669068172574043
+      ],
+      "min": [
+        -0.030000001192092896,
+        -0.017447302117943764,
+        -0.0030148515943437815
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 58848,
+      "componentType": 5126,
+      "count": 568,
+      "max": [
+        1.0,
+        0.9821197986602783,
+        0.9684032797813416
+      ],
+      "min": [
+        -1.0,
+        -0.9820753931999207,
+        -0.9630403518676758
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "byteOffset": 34688,
+      "componentType": 5126,
+      "count": 568,
+      "max": [
+        1.0,
+        0.9892920851707458,
+        0.9630407094955444,
+        1.0
+      ],
+      "min": [
+        -1.0,
+        -0.9894389510154724,
+        -0.9632200598716736,
+        -1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 52032,
+      "componentType": 5126,
+      "count": 568,
+      "max": [
+        0.7836626768112183,
+        0.6534958481788635
+      ],
+      "min": [
+        0.0035387149546295404,
+        0.0034920324105769396
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 56576,
+      "componentType": 5126,
+      "count": 568,
+      "max": [
+        0.7836626768112183,
+        0.6534958481788635
+      ],
+      "min": [
+        0.0035387149546295404,
+        0.0034920324105769396
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 61120,
+      "componentType": 5126,
+      "count": 568,
+      "max": [
+        0.7836626768112183,
+        0.6534958481788635
+      ],
+      "min": [
+        0.0035387149546295404,
+        0.0034920324105769396
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 39120,
+      "componentType": 5125,
+      "count": 1632,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 65664,
+      "componentType": 5126,
+      "count": 59,
+      "max": [
+        0.028448518365621567,
+        0.030000001192092896,
+        0.0
+      ],
+      "min": [
+        -0.028448518365621567,
+        -0.022849420085549355,
+        -0.002966585336253047
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 66372,
+      "componentType": 5126,
+      "count": 59,
+      "max": [
+        0.1305515468120575,
+        0.15612885355949402,
+        -0.9790710806846619
+      ],
+      "min": [
+        -1.662138173407976e-14,
+        -1.2506147228918962e-08,
+        -1.0
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "byteOffset": 43776,
+      "componentType": 5126,
+      "count": 59,
+      "max": [
+        -0.9914132952690125,
+        0.013108381070196629,
+        -1.0009261621575158e-13,
+        1.0
+      ],
+      "min": [
+        -1.0,
+        -6.987736560404301e-05,
+        -0.13010692596435547,
+        1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 65664,
+      "componentType": 5126,
+      "count": 59,
+      "max": [
+        0.7460468411445618,
+        0.7491814494132996
+      ],
+      "min": [
+        0.38828998804092407,
+        0.40764909982681274
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 66136,
+      "componentType": 5126,
+      "count": 59,
+      "max": [
+        0.7460468411445618,
+        0.7491814494132996
+      ],
+      "min": [
+        0.38828998804092407,
+        0.40764909982681274
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 66608,
+      "componentType": 5126,
+      "count": 59,
+      "max": [
+        0.7460468411445618,
+        0.7491814494132996
+      ],
+      "min": [
+        0.38828998804092407,
+        0.40764909982681274
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 45648,
+      "componentType": 5125,
+      "count": 252,
+      "type": "SCALAR"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 67080,
+      "componentType": 5126,
+      "count": 260,
+      "max": [
+        0.028448518365621567,
+        0.030000001192092896,
+        0.0010000000474974513
+      ],
+      "min": [
+        -0.028448518365621567,
+        -0.022043384611606598,
+        -8.733418432882445e-10
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 2,
+      "byteOffset": 70200,
+      "componentType": 5126,
+      "count": 260,
+      "max": [
+        1.0,
+        1.0,
+        0.0
+      ],
+      "min": [
+        -1.0,
+        -1.0,
+        -1.0
+      ],
+      "type": "VEC3"
+    },
+    {
+      "bufferView": 3,
+      "byteOffset": 44720,
+      "componentType": 5126,
+      "count": 260,
+      "max": [
+        2.417427094769664e-05,
+        1.0,
+        1.0,
+        1.0
+      ],
+      "min": [
+        -1.0,
+        -4.6567980461986735e-05,
+        -4.667066093588801e-07,
+        1.0
+      ],
+      "type": "VEC4"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 67080,
+      "componentType": 5126,
+      "count": 260,
+      "max": [
+        0.7627650499343872,
+        0.9968188405036926
+      ],
+      "min": [
+        0.003245040774345398,
+        0.40029990673065186
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 69160,
+      "componentType": 5126,
+      "count": 260,
+      "max": [
+        0.7627650499343872,
+        0.9968188405036926
+      ],
+      "min": [
+        0.003245040774345398,
+        0.40029990673065186
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 1,
+      "byteOffset": 71240,
+      "componentType": 5126,
+      "count": 260,
+      "max": [
+        0.7627650499343872,
+        0.9968188405036926
+      ],
+      "min": [
+        0.003245040774345398,
+        0.40029990673065186
+      ],
+      "type": "VEC2"
+    },
+    {
+      "bufferView": 0,
+      "byteOffset": 46656,
+      "componentType": 5125,
+      "count": 420,
+      "type": "SCALAR"
+    }
+  ],
+  "asset": {
+    "extras": {
+      "author": "XIN (https://sketchfab.com/K.Shitanaga)",
+      "license": "CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)",
+      "source": "https://sketchfab.com/3d-models/deskcalendar-8bf6cd3f54504302abad4e028863c94f",
+      "title": "DeskCalendar"
+    },
+    "generator": "Sketchfab-17.8.0",
+    "version": "2.0"
+  },
+  "bufferViews": [
+    {
+      "buffer": 0,
+      "byteLength": 48336,
+      "name": "floatBufferViews",
+      "target": 34963
+    },
+    {
+      "buffer": 0,
+      "byteLength": 73320,
+      "byteOffset": 48336,
+      "byteStride": 8,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 73320,
+      "byteOffset": 121656,
+      "byteStride": 12,
+      "name": "floatBufferViews",
+      "target": 34962
+    },
+    {
+      "buffer": 0,
+      "byteLength": 48880,
+      "byteOffset": 194976,
+      "byteStride": 16,
+      "name": "floatBufferViews",
+      "target": 34962
+    }
+  ],
+  "buffers": [
+    {
+      "byteLength": 243856,
+      "uri": "scene.bin"
+    }
+  ],
+  "images": [
+    {
+      "uri": "textures/M_DeskCalender_A_baseColor.jpeg"
+    },
+    {
+      "uri": "textures/M_DeskCalender_A_metallicRoughness.png"
+    },
+    {
+      "uri": "textures/M_DeskCalender_A_normal.png"
+    }
+  ],
+  "materials": [
+    {
+      "doubleSided": true,
+      "name": "M_DeskCalender_A",
+      "normalTexture": {
+        "index": 2
+      },
+      "pbrMetallicRoughness": {
+        "baseColorTexture": {
+          "index": 0
+        },
+        "metallicRoughnessTexture": {
+          "index": 1
+        }
+      }
+    }
+  ],
+  "meshes": [
+    {
+      "name": "DeskCalendar_a_M_DeskCalender_A_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 1,
+            "POSITION": 0,
+            "TANGENT": 2,
+            "TEXCOORD_0": 3,
+            "TEXCOORD_1": 4,
+            "TEXCOORD_2": 5
+          },
+          "indices": 6,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "DeskCalendar_b_M_DeskCalender_A_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 8,
+            "POSITION": 7,
+            "TANGENT": 9,
+            "TEXCOORD_0": 10,
+            "TEXCOORD_1": 11,
+            "TEXCOORD_2": 12
+          },
+          "indices": 13,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "DeskCalendar_c_M_DeskCalender_A_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 15,
+            "POSITION": 14,
+            "TANGENT": 16,
+            "TEXCOORD_0": 17,
+            "TEXCOORD_1": 18,
+            "TEXCOORD_2": 19
+          },
+          "indices": 20,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    },
+    {
+      "name": "DeskCalendar_d_M_DeskCalender_A_0",
+      "primitives": [
+        {
+          "attributes": {
+            "NORMAL": 22,
+            "POSITION": 21,
+            "TANGENT": 23,
+            "TEXCOORD_0": 24,
+            "TEXCOORD_1": 25,
+            "TEXCOORD_2": 26
+          },
+          "indices": 27,
+          "material": 0,
+          "mode": 4
+        }
+      ]
+    }
+  ],
+  "nodes": [
+    {
+      "children": [
+        1
+      ],
+      "matrix": [
+        -1.0,
+        -1.60812262295773e-16,
+        2.8327693431939985e-16,
+        0.0,
+        2.832769343193999e-16,
+        -6.123234262925839e-17,
+        1.0,
+        0.0,
+        -1.6081226229577292e-16,
+        1.0,
+        6.123234262925839e-17,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "Sketchfab_model"
+    },
+    {
+      "children": [
+        2
+      ],
+      "matrix": [
+        0.009999999776482582,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.009999999776482582,
+        0.0,
+        0.0,
+        -0.009999999776482582,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "SM_Room_DeskCalendar_A_b.fbx"
+    },
+    {
+      "children": [
+        3,
+        5,
+        7,
+        9
+      ],
+      "name": "RootNode"
+    },
+    {
+      "children": [
+        4
+      ],
+      "matrix": [
+        100.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -1.629206793918314e-05,
+        -99.99999999999868,
+        0.0,
+        0.0,
+        99.99999999999868,
+        -1.629206793918314e-05,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        1.0
+      ],
+      "name": "DeskCalendar_a"
+    },
+    {
+      "mesh": 0,
+      "name": "DeskCalendar_a_M_DeskCalender_A_0"
+    },
+    {
+      "children": [
+        6
+      ],
+      "matrix": [
+        100.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        -1.629206793918314e-05,
+        -99.99999999999868,
+        0.0,
+        0.0,
+        99.99999999999868,
+        -1.629206793918314e-05,
+        0.0,
+        0.0,
+        0.5053118467330933,
+        0.0,
+        1.0
+      ],
+      "name": "DeskCalendar_b"
+    },
+    {
+      "mesh": 1,
+      "name": "DeskCalendar_b_M_DeskCalender_A_0"
+    },
+    {
+      "children": [
+        8
+      ],
+      "matrix": [
+        100.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        96.5013680017347,
+        26.219953733631474,
+        0.0,
+        0.0,
+        -26.219953733631474,
+        96.5013680017347,
+        0.0,
+        0.007012486457824707,
+        3.1799957752227783,
+        -1.05502450466156,
+        1.0
+      ],
+      "name": "DeskCalendar_c"
+    },
+    {
+      "mesh": 2,
+      "name": "DeskCalendar_c_M_DeskCalender_A_0"
+    },
+    {
+      "children": [
+        10
+      ],
+      "matrix": [
+        100.0,
+        0.0,
+        0.0,
+        0.0,
+        0.0,
+        96.31140794133448,
+        26.909342250561487,
+        0.0,
+        0.0,
+        -26.909342250561487,
+        96.31140794133448,
+        0.0,
+        0.007012486457824707,
+        3.158742904663086,
+        -1.0082144737243652,
+        1.0
+      ],
+      "name": "DeskCalendar_d"
+    },
+    {
+      "mesh": 3,
+      "name": "DeskCalendar_d_M_DeskCalender_A_0"
+    }
+  ],
+  "samplers": [
+    {
+      "magFilter": 9729,
+      "minFilter": 9987,
+      "wrapS": 10497,
+      "wrapT": 10497
+    }
+  ],
+  "scene": 0,
+  "scenes": [
+    {
+      "name": "Sketchfab_Scene",
+      "nodes": [
+        0
+      ]
+    }
+  ],
+  "textures": [
+    {
+      "sampler": 0,
+      "source": 0
+    },
+    {
+      "sampler": 0,
+      "source": 1
+    },
+    {
+      "sampler": 0,
+      "source": 2
+    }
+  ]
+}

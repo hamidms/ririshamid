@@ -1,0 +1,11 @@
+Model Information:
+* title:	Shoes
+* source:	https://sketchfab.com/3d-models/shoes-08158fa3333a4b288bd2746a6ba6f9e5
+* author:	Cyril43 (https://sketchfab.com/Cyril43)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Shoes" (https://sketchfab.com/3d-models/shoes-08158fa3333a4b288bd2746a6ba6f9e5) by Cyril43 (https://sketchfab.com/Cyril43) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)

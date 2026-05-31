@@ -1,0 +1,11 @@
+Model Information:
+* title:	Ring box
+* source:	https://sketchfab.com/3d-models/ring-box-4a80eed40ae84093bec69dbf6654c209
+* author:	Starshine (https://sketchfab.com/jutan2004)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Ring box" (https://sketchfab.com/3d-models/ring-box-4a80eed40ae84093bec69dbf6654c209) by Starshine (https://sketchfab.com/jutan2004) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
