@@ -18,6 +18,7 @@ import GrassModel from "@/components/GrassModel";
 import CalendarModalBox from "@/components/CalendarModalBox";
 import BookModalBox from "@/components/BookModalBox";
 import PhoneModalBox from "@/components/PhoneModalBox";
+import CoupleModalBox from "@/components/CoupleModalBox";
 
 export default function Home() {
   const [activeModel, setActiveModel] = useState<string | null>(null);
@@ -38,11 +39,11 @@ export default function Home() {
 
           {/* Mengirimkan fungsi pop-up unik ke tiap model */}
           <group position={[0.1, -2, 0.2]} rotation={[0, 1.5, 0]}>
-            <ShoesModel onSelect={() => setActiveModel("Koleksi Sepatu Sneaker")} />
+            <ShoesModel onSelect={() => setActiveModel("Couple")} />
           </group>
 
           <group position={[-1, -2.3, 0.2]} rotation={[0, -0.4, 0]}>
-            <HeelsModel onSelect={() => setActiveModel("High Heels Merah")} />
+            <HeelsModel onSelect={() => setActiveModel("Couple")} />
           </group>
 
           <group position={[1.8, -2, -1]} rotation={[0, -0.5, 0]}>
@@ -81,6 +82,11 @@ export default function Home() {
       </Canvas>
 
 {/* PANGGIL MODAL SEPARASI DI SINI */}
+      <CoupleModalBox 
+        isOpen={activeModel === "Couple"} 
+        onClose={() => setActiveModel(null)} 
+      />
+
       <CalendarModalBox 
         isOpen={activeModel === "Calendar"} 
         onClose={() => setActiveModel(null)} 
