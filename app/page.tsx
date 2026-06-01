@@ -19,9 +19,11 @@ import CalendarModalBox from "@/components/CalendarModalBox";
 import BookModalBox from "@/components/BookModalBox";
 import PhoneModalBox from "@/components/PhoneModalBox";
 import CoupleModalBox from "@/components/CoupleModalBox";
+import GiftModalBox from "@/components/GiftModalBox";
 
 export default function Home() {
   const [activeModel, setActiveModel] = useState<string | null>(null);
+  const [isGiftOpen, setIsGiftOpen] = useState(false);
 
   return (
     <main style={{ width: "100vw", height: "100vh", backgroundColor: "#afafaf", position: "relative" }}>
@@ -54,8 +56,21 @@ export default function Home() {
             <PhoneModel onSelect={() => setActiveModel("Phone")} />
           </group>
 
-          <group position={[0, -2.4, -1.2]}>
+          {/* <group position={[0, -2.4, -1.2]}>
             <SunflowerModel onSelect={() => setActiveModel("Tanaman Bunga Matahari")} />
+          </group> */}
+
+          {/* GROUP MODEL 3D KAMU */}
+          <group position={[0, -2.4, -1.2]}>
+            <SunflowerModel 
+              onSelect={() => {
+                // A. Jalankan fungsi bawaan kamu jika ada
+                setActiveModel("Tanaman Bunga Matahari"); 
+                
+                // B. LANGSUNG TRIGGERS MODAL UNTUK MUNCUL DI SINI
+                setIsGiftOpen(true); 
+              }} 
+            />
           </group>
 
           <group position={[-1, -2, 0.5]} rotation={[0, 0, 1.5]}>
@@ -102,8 +117,10 @@ export default function Home() {
         onClose={() => setActiveModel(null)} 
       />
 
+      <GiftModalBox isOpen={isGiftOpen} onClose={() => setIsGiftOpen(false)} />
+
       {/* DEFAULT POPUP UTK OBJEK SELAIN KALENDER (Jika Masih Perlu) */}
-      {activeModel && activeModel !== "Calendar" && (
+      {/* {activeModel && activeModel !== "Calendar" && (
         console.log("Active Model:", activeModel), // Debugging: Log model yang aktif
         <div style={{
           position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
@@ -114,7 +131,7 @@ export default function Home() {
           <button onClick={() => setActiveModel(null)} style={{ position: "absolute", top: "20px", right: "20px", cursor: "pointer" }}>✕</button>
           <h1>Detail Objek: {activeModel}</h1>
         </div>
-      )}
+      )} */}
     </main>
   );
 }
