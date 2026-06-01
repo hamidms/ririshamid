@@ -20,6 +20,7 @@ import BookModalBox from "@/components/BookModalBox";
 import PhoneModalBox from "@/components/PhoneModalBox";
 import CoupleModalBox from "@/components/CoupleModalBox";
 import GiftModalBox from "@/components/GiftModalBox";
+import HeadphoneModalBox from "@/components/AudioModalBox";
 
 export default function Home() {
   const [activeModel, setActiveModel] = useState<string | null>(null);
@@ -74,7 +75,7 @@ export default function Home() {
           </group>
 
           <group position={[-1, -2, 0.5]} rotation={[0, 0, 1.5]}>
-            <HeadphoneModel onSelect={() => setActiveModel("Headphone Audio Pro")} />
+            <HeadphoneModel onSelect={() => setActiveModel("Headphone")} />
           </group>
 
           <group position={[-2, -2.3, 1.5]} rotation={[0, 1, 0]}>
@@ -114,6 +115,11 @@ export default function Home() {
 
       <PhoneModalBox 
         isOpen={activeModel === "Phone"} 
+        onClose={() => setActiveModel(null)} 
+      />
+
+      <HeadphoneModalBox 
+        isOpen={activeModel === "Headphone"} 
         onClose={() => setActiveModel(null)} 
       />
 
