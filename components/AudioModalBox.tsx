@@ -1,60 +1,27 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React from "react";
 
 interface AudioModalBoxProps {
   isOpen: boolean;
   onClose: () => void;
+  isPlaying: boolean;
+  togglePlay: () => void;
+  progress: number;
 }
 
-export default function AudioModalBox({ isOpen, onClose }: AudioModalBoxProps) {
-  const [isPlaying, setIsPlaying] = useState(false);
-  const [progress, setProgress] = useState(0);
-  
-  const audioRef = useRef<HTMLAudioElement | null>(null);
-
-  useEffect(() => {
-    if (!isOpen && audioRef.current) {
-      audioRef.current.pause();
-      setIsPlaying(false);
-    }
-  }, [isOpen]);
-
-  const handleTimeUpdate = () => {
-    if (audioRef.current) {
-      const current = audioRef.current.currentTime;
-      const duration = audioRef.current.duration || 1;
-      setProgress((current / duration) * 100);
-    }
-  };
-
-  const togglePlay = (e: React.MouseEvent) => {
-    e.preventDefault();
-    e.stopPropagation(); // Mencegah klik menembus ke elemen latar belakang
-    
-    if (audioRef.current) {
-      if (isPlaying) {
-        audioRef.current.pause();
-      } else {
-        audioRef.current.play().catch((err) => {
-          console.log("Playback blocked:", err);
-        });
-      }
-      setIsPlaying(!isPlaying);
-    }
-  };
+export default function AudioModalBox({ 
+  isOpen, 
+  onClose, 
+  isPlaying, 
+  togglePlay, 
+  progress 
+}: AudioModalBoxProps) {
 
   if (!isOpen) return null;
 
   return (
     <>
-      <audio 
-        ref={audioRef}
-        src="/audio/taruh.mp3" 
-        onTimeUpdate={handleTimeUpdate}
-        onEnded={() => setIsPlaying(false)}
-      />
-
       {/* TOMBOL SILANG FIXED */}
       <button 
         onClick={onClose} 
@@ -94,7 +61,7 @@ export default function AudioModalBox({ isOpen, onClose }: AudioModalBoxProps) {
         zIndex: 10000,
         boxSizing: "border-box",
         padding: "60px 20px 40px 20px",
-        display: "block", // Menggunakan block biasa agar elemen di dalam mengalir alami ke bawah
+        display: "block",
         overflowX: "hidden",
         overflowY: "auto",
       }}>
@@ -148,11 +115,10 @@ export default function AudioModalBox({ isOpen, onClose }: AudioModalBoxProps) {
           </p>
         </div>
 
-        {/* WIDGET AUDIO PLAYER (TOTAL FIX DENGAN VALUE ABSOLUT) */}
+        {/* WIDGET AUDIO PLAYER */}
         <div style={{
           width: "100%",
           maxWidth: "420px",
-          // Menggunakan minHeight dan height tetap yang dipaksa agar terhindar dari himpitan layout luar
           height: "260px",
           minHeight: "260px", 
           borderRadius: "24px",
@@ -164,7 +130,7 @@ export default function AudioModalBox({ isOpen, onClose }: AudioModalBoxProps) {
           backgroundImage: "linear-gradient(to right, rgba(15,20,30,0.85), rgba(15,20,30,0.45)), url('https://t2.genius.com/unsafe/344x344/https%3A%2F%2Fimages.genius.com%2F9b2e7b465162c2aa5c670844c040f15c.1000x1000x1.png')",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          display: "table", // Menggunakan format display table/block alternatif agar terhindar dari bug flexbox di beberapa browser
+          display: "table", 
           padding: "20px 18px",
           boxSizing: "border-box",
           color: "#ffffff"
@@ -209,7 +175,7 @@ export default function AudioModalBox({ isOpen, onClose }: AudioModalBoxProps) {
               </p>
             </div>
 
-            {/* Tombol Putih Play/Pause */}
+            {/* Tombol Putih Kontrol Real-Time Sesuai State Global */}
             <button 
               onClick={togglePlay}
               style={{
@@ -229,10 +195,12 @@ export default function AudioModalBox({ isOpen, onClose }: AudioModalBoxProps) {
               }}
             >
               {isPlaying ? (
+                /* Jika sedang memutar, tampilkan Ikon Pause */
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor">
                   <path d="M6 19h4V5H6v14zm8-14v14h4V5h-4z"/>
                 </svg>
               ) : (
+                /* Jika di-pause, tampilkan Ikon Play */
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" style={{ marginLeft: "3px" }}>
                   <path d="M8 5v14l11-7z"/>
                 </svg>
@@ -243,7 +211,6 @@ export default function AudioModalBox({ isOpen, onClose }: AudioModalBoxProps) {
           {/* BARIS BAWAH: RUNNING TRACKER LINE & KONTROL */}
           <div style={{ display: "block", width: "100%", marginTop: "35px", clear: "both" }}>
             
-            {/* Wave & Progress Bar */}
             <div style={{ display: "flex", alignItems: "center", gap: "8px", width: "100%", marginBottom: "15px" }}>
               <svg width="14" height="8" viewBox="0 0 24 12" fill="none" stroke="rgba(255,255,255,0.9)" strokeWidth="3">
                 <path d="M2 6c3-4 5-4 8 0s5 4 8 0 4-2 4-2" />
@@ -259,7 +226,6 @@ export default function AudioModalBox({ isOpen, onClose }: AudioModalBoxProps) {
               </div>
             </div>
 
-            {/* Ikon Baris Paling Bawah */}
             <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", width: "100%", opacity: 0.95 }}>
               <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5">
                 <line x1="12" y1="5" x2="12" y2="19"></line>
