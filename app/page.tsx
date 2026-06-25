@@ -29,6 +29,8 @@ export default function Home() {
   const [isPlaying, setIsPlaying] = useState(false);
   const [progress, setProgress] = useState(0);
 
+  const [wasPlayingBeforeModal, setWasPlayingBeforeModal] = useState(false);
+
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   // Efek untuk Autoplay saat pertama kali web dibuka
@@ -37,6 +39,7 @@ export default function Home() {
       audioRef.current.play()
         .then(() => {
           setIsPlaying(true);
+          fadeInAudio(); // Panggil fade in!
         })
         .catch((err) => {
           // Beberapa browser memblokir autoplay sebelum user berinteraksi dengan halaman
@@ -54,28 +57,128 @@ export default function Home() {
     }
   };
 
-  // Fungsi Play / Pause global
+  // Perbaikan Fungsi Play / Pause global
   const togglePlay = () => {
     if (audioRef.current) {
       if (isPlaying) {
-        audioRef.current.pause();
+        // 1. Panggil fungsi fade out terlebih dahulu
+        fadeOutAudio(() => {
+          // State isPlaying baru diubah menjadi false SETELAH volume benar-benar 0 dan audio ter-pause
+          setIsPlaying(false);
+        });
       } else {
-        audioRef.current.play().catch((err) => console.log(err));
+        // 2. Jika statusnya sedang pause, langsung set isPlaying menjadi true
+        setIsPlaying(true);
+        
+        audioRef.current.volume = 0; // Reset ke sunyi sebelum mulai jalan
+        audioRef.current.play()
+          .then(() => {
+            fadeInAudio(); // Panggil efek fade in secara bertahap
+          })
+          .catch((err) => {
+            console.log("Gagal memutar audio:", err);
+            setIsPlaying(false); // Kembalikan ke false jika diblokir browser
+          });
       }
-      setIsPlaying(!isPlaying);
     }
+  };
+
+  const fadeInAudio = () => {
+    if (audioRef.current) {
+      audioRef.current.volume = 0; // Mulai dari sunyi
+      let vol = 0;
+      
+      const interval = setInterval(() => {
+        if (audioRef.current && !audioRef.current.paused) {
+          vol += 0.05; // Naikkan volume bertahap
+          if (vol >= 1) {
+            audioRef.current.volume = 1; // Maksimal volume (100%)
+            clearInterval(interval);
+          } else {
+            audioRef.current.volume = vol;
+          }
+        } else {
+          // Jika di-pause saat proses fade-in berlangsung, hentikan interval
+          clearInterval(interval);
+        }
+      }, 75); // Berjalan setiap 75ms (total ~1.5 detik untuk mencapai volume penuh)
+    }
+  };
+
+  // Fungsi untuk menurunkan volume secara bertahap dari posisi saat ini ke 0 selama ~0.4 detik, baru di-pause
+  const fadeOutAudio = (callback: () => void) => {
+    if (audioRef.current) {
+      let vol = audioRef.current.volume;
+      
+      const interval = setInterval(() => {
+        if (audioRef.current && !audioRef.current.paused) {
+          vol -= 0.1; // Turunkan volume dengan cepat tapi tetap halus
+          if (vol <= 0) {
+            audioRef.current.volume = 0;
+            audioRef.current.pause(); // BARU DI-PAUSE SETELAH SUNYI
+            clearInterval(interval);
+            callback(); // Menjalankan fungsi ganti state isPlaying jadi false
+          } else {
+            audioRef.current.volume = vol;
+          }
+        } else {
+          clearInterval(interval);
+        }
+      }, 40); // Berjalan cepat tiap 40ms biar fade-out terasa pas (tidak terlalu lama menunda pause)
+    } else {
+      callback();
+    }
+  };
+
+  // Perbaikan Fungsi saat tombol Phone diklik untuk membuka modal
+  const handleOpenPhoneModal = () => {
+    // 1. Simpan status terakhir: apakah musik lagi jalan atau tidak?
+    setWasPlayingBeforeModal(isPlaying);
+    
+    // 2. Jika musik lagi jalan, jalankan fade out terlebih dahulu
+    if (isPlaying && audioRef.current) {
+      fadeOutAudio(() => {
+        // Kode di dalam blok ini baru berjalan SETELAH volume lagu menyentuh 0 dan lagu ter-pause
+        setIsPlaying(false);
+        setActiveModel("Phone"); // Modal baru terbuka setelah suara mengecil halus
+      });
+    } else {
+      // 3. Jika musik memang sedang mati/pause, langsung buka modal dengan aman
+      setActiveModel("Phone");
+    }
+  };
+
+  // 2. Fungsi saat modal Phone ditutup (onClose)
+  const handleClosePhoneModal = () => {
+    // Tutup modal terlebih dahulu
+    setActiveModel(null);
+    
+    // Cek catatan kita: Jika sebelum modal dibuka musiknya jalan, maka mainkan lagi
+    if (wasPlayingBeforeModal && audioRef.current) {
+      audioRef.current.volume = 0; // Reset ke sunyi dulu
+      audioRef.current.play()
+        .then(() => {
+          fadeInAudio(); // Musik berlanjut dengan efek halus!
+        })
+        .catch((err) => console.log(err));
+      setIsPlaying(true);
+    }
+    
+    // Reset kembali state pengingatnya
+    setWasPlayingBeforeModal(false);
   };
 
   return (
     <div style={{ minHeight: "100vh", position: "relative" }}>
     
-    {/* 1. Element Audio diletakkan di luar <main> */}
-    <audio 
-      ref={audioRef}
-      src="/audio/taruh.mp3" 
-      onTimeUpdate={handleTimeUpdate}
-      onEnded={() => setIsPlaying(false)}
-    />
+      {/* 1. Element Audio diletakkan di luar <main> */}
+      <audio 
+        ref={audioRef}
+        src="/audio/taruh.mp3" 
+        onTimeUpdate={handleTimeUpdate}
+        onEnded={() => setIsPlaying(false)}
+      />
+
       <main style={{ width: "100vw", height: "100vh", backgroundColor: "#afafaf", position: "relative" }}>
         <Canvas>
           <OrthographicCamera makeDefault position={[12, 12, 12]} zoom={110} near={0.1} far={1000} />
@@ -102,8 +205,13 @@ export default function Home() {
               <BookModel onSelect={() => setActiveModel("Book")} />
             </group>
 
-            <group position={[1.8, -2.2, 0.5]} rotation={[Math.PI / 2, 3, Math.PI / 3]}>
+            {/* <group position={[1.8, -2.2, 0.5]} rotation={[Math.PI / 2, 3, Math.PI / 3]}>
               <PhoneModel onSelect={() => setActiveModel("Phone")} />
+            </group> */}
+
+            <group position={[1.8, -2.2, 0.5]} rotation={[Math.PI / 2, 3, Math.PI / 3]}>
+              {/* Menggunakan fungsi handler khusus untuk mendeteksi status musik sebelum dibuka */}
+              <PhoneModel onSelect={handleOpenPhoneModal} />
             </group>
 
             {/* <group position={[0, -2.4, -1.2]}>
@@ -146,7 +254,7 @@ export default function Home() {
           />
         </Canvas>
 
-  {/* PANGGIL MODAL SEPARASI DI SINI */}
+        {/* PANGGIL MODAL SEPARASI DI SINI */}
         <CoupleModalBox 
           isOpen={activeModel === "Couple"} 
           onClose={() => setActiveModel(null)} 
@@ -162,15 +270,21 @@ export default function Home() {
           onClose={() => setActiveModel(null)} 
         />
 
-        <PhoneModalBox 
+        {/* <PhoneModalBox 
           isOpen={activeModel === "Phone"} 
           onClose={() => setActiveModel(null)} 
+        /> */}
+
+        <PhoneModalBox 
+          isOpen={activeModel === "Phone"} 
+          onClose={handleClosePhoneModal} // Menggunakan fungsi handle khusus kita
         />
 
         <HeadphoneModalBox 
-          isOpen={activeModel === "Headphone"} 
-          onClose={() => setActiveModel(null)} 
-        />
+          isOpen={activeModel === "Headphone"}
+          onClose={() => setActiveModel(null)} isPlaying={false} togglePlay={function (): void {
+            throw new Error("Function not implemented.");
+          } } progress={0}        />
 
         <GiftModalBox isOpen={isGiftOpen} onClose={() => setIsGiftOpen(false)} />
 
