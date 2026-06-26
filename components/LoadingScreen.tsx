@@ -2,7 +2,11 @@
 
 import React, { useEffect, useState } from "react";
 
-export default function LoadingScreen() {
+interface LoadingScreenProps {
+  isFadingOut: boolean;
+}
+
+export default function LoadingScreen({ isFadingOut }: LoadingScreenProps) {
   const [progress, setProgress] = useState(0);
 
   // Efek simulasi loading bar berjalan mulus menuju 100% dalam 2 detik
@@ -19,7 +23,7 @@ export default function LoadingScreen() {
       if (elapsed >= duration) {
         clearInterval(interval);
       }
-    }, 16); // ~60fps smooth update
+    }, 16);
 
     return () => clearInterval(interval);
   }, []);
@@ -31,8 +35,8 @@ export default function LoadingScreen() {
       left: 0,
       width: "100vw",
       height: "100vh",
-      backgroundColor: "#f4f1ea", // Warna krem estetik sesuai gambar tutorialmu
-      zIndex: 99998, // Di bawah WeddingCover, tapi di atas konten utama 3D
+      backgroundColor: "#f4f1ea",
+      zIndex: 99998,
       display: "flex",
       flexDirection: "column",
       justifyContent: "center",
@@ -40,7 +44,12 @@ export default function LoadingScreen() {
       fontFamily: "'Georgia', serif",
       color: "#4a3728",
       boxSizing: "border-box",
-      padding: "24px"
+      padding: "24px",
+      
+      // EFEK SMOOTH FADE OUT DI SINI
+      opacity: isFadingOut ? 0 : 1,
+      pointerEvents: isFadingOut ? "none" : "auto", // Biar ga bisa di-klik pas memudar
+      transition: "opacity 0.8s ease-in-out" // Durasi memudar selama 0.8 detik
     }}>
       
       {/* HEADER TUTORIAL */}
@@ -55,7 +64,7 @@ export default function LoadingScreen() {
         mini tutorial
       </h3>
 
-      {/* DAFTAR TUTORIAL (VERTIKAL: ATAS KE BAWAH) */}
+      {/* DAFTAR TUTORIAL (VERTIKAL) */}
       <div style={{
         display: "flex",
         flexDirection: "column",
@@ -64,8 +73,6 @@ export default function LoadingScreen() {
         maxWidth: "280px",
         marginBottom: "50px"
       }}>
-        
-        {/* ITEM 1 */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
           <div style={{ fontSize: "1.5rem", marginBottom: "8px" }}>🫳</div>
           <p style={{ fontFamily: "Arial, sans-serif", fontSize: "0.82rem", margin: 0, opacity: 0.85, lineHeight: "1.4" }}>
@@ -73,7 +80,6 @@ export default function LoadingScreen() {
           </p>
         </div>
 
-        {/* ITEM 2 */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
           <div style={{ fontSize: "1.5rem", marginBottom: "8px" }}>👆</div>
           <p style={{ fontFamily: "Arial, sans-serif", fontSize: "0.82rem", margin: 0, opacity: 0.85, lineHeight: "1.4" }}>
@@ -81,20 +87,16 @@ export default function LoadingScreen() {
           </p>
         </div>
 
-        {/* ITEM 3 */}
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
           <div style={{ fontSize: "1.5rem", marginBottom: "8px" }}>🪲</div>
           <p style={{ fontFamily: "Arial, sans-serif", fontSize: "0.82rem", margin: 0, opacity: 0.85, lineHeight: "1.4" }}>
             if something doesn't work, let me know!
           </p>
         </div>
-
       </div>
 
       {/* LOADING BAR SECTION */}
       <div style={{ width: "100%", maxWidth: "320px", textAlign: "right" }}>
-        
-        {/* Progress Container Track */}
         <div style={{
           width: "100%",
           height: "12px",
@@ -104,7 +106,6 @@ export default function LoadingScreen() {
           position: "relative",
           marginBottom: "8px"
         }}>
-          {/* Progress Fill dengan Motif Garis Belang (Stripes) */}
           <div style={{
             width: `${progress}%`,
             height: "100%",
@@ -114,15 +115,7 @@ export default function LoadingScreen() {
             transition: "width 0.1s linear"
           }} />
         </div>
-
-        {/* Loading Text */}
-        <span style={{
-          fontFamily: "Arial, sans-serif",
-          fontSize: "0.75rem",
-          fontStyle: "italic",
-          opacity: 0.7,
-          letterSpacing: "0.5px"
-        }}>
+        <span style={{ fontFamily: "Arial, sans-serif", fontSize: "0.75rem", fontStyle: "italic", opacity: 0.7 }}>
           now loading...
         </span>
       </div>

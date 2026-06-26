@@ -38,42 +38,50 @@ export default function Home() {
 
   const [isCoverOpen, setIsCoverOpen] = useState(true);
   const [isLoading, setIsLoading] = useState(false); // State baru untuk loading screen
+  const [isFadingOut, setIsFadingOut] = useState(false); // State baru untuk efek memudar
 
   // Efek untuk Autoplay saat pertama kali web dibuka
-  useEffect(() => {
-    if (audioRef.current) {
-      audioRef.current.play()
-        .then(() => {
-          setIsPlaying(true);
-          fadeInAudio(); // Panggil fade in!
-        })
-        .catch((err) => {
-          // Beberapa browser memblokir autoplay sebelum user berinteraksi dengan halaman
-          console.log("Autoplay diblokir oleh browser. Lagu akan menyala setelah klik pertama.", err);
-        });
-    }
-  }, []);
+  // useEffect(() => {
+  //   if (audioRef.current) {
+  //     audioRef.current.play()
+  //       .then(() => {
+  //         setIsPlaying(true);
+  //         fadeInAudio(); // Panggil fade in!
+  //       })
+  //       .catch((err) => {
+  //         // Beberapa browser memblokir autoplay sebelum user berinteraksi dengan halaman
+  //         console.log("Autoplay diblokir oleh browser. Lagu akan menyala setelah klik pertama.", err);
+  //       });
+  //   }
+  // }, []);
 
-  // Fungsi ketika tombol "Buka Undangan" diklik
+  // Perbaikan Fungsi ketika tombol "Buka Undangan" diklik di Cover halaman
   const handleOpenInvitation = () => {
-    setIsCoverOpen(false); // 1. Tutup cover halaman
+    setIsCoverOpen(false); // 1. Tutup cover halaman halaman depan
     setIsLoading(true);    // 2. Aktifkan loading screen tutorial
 
-    // Langsung mainkan musik latar secara halus begitu undangan dibuka!
+    // 3. Langsung mainkan musik latar secara halus begitu undangan dibuka!
     if (audioRef.current) {
       audioRef.current.volume = 0;
       audioRef.current.play()
         .then(() => {
           setIsPlaying(true);
-          fadeInAudio();
+          fadeInAudio(); // Musik berangsur membesar di latar belakang loading
         })
         .catch((err) => console.log("Autoplay blocked:", err));
     }
 
-    // 4. Set waktu 2 detik (2000ms), lalu matikan loading screen untuk memunculkan dunia 3D
+    // 4. Setelah 2 detik (2000ms), jalankan efek memudar perlahan
     setTimeout(() => {
-      setIsLoading(false);
-    }, 2000);
+      setIsFadingOut(true); // Memicu opacity CSS LoadingScreen bergerak ke 0
+
+      // 5. Beri jeda 0.8 detik (800ms) menunggu animasi transisi selesai, baru lepas dari DOM
+      setTimeout(() => {
+        setIsLoading(false);
+        setIsFadingOut(false); // Reset kembali state transisi ke kondisi awal
+      }, 800); // Durasi ini wajib sinkron dengan transition: "opacity 0.8s" di LoadingScreen
+
+    }, 2000); // Waktu tunggu loading utama (2 detik)
   };
 
   // Mengupdate progress bar
@@ -354,7 +362,9 @@ export default function Home() {
       {/* LAYER 3 (ATAS): LOADING OVERLAY SCREEN                    */}
       {/* Hanya muncul saat isLoading bernilai true                 */}
       {/* ========================================================= */}
-      {isLoading && <LoadingScreen />}
+      {isLoading && (
+        <LoadingScreen isFadingOut={isFadingOut} />
+      )}
 
 
       {/* ========================================================= */}
