@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
 import { Canvas } from "@react-three/fiber";
 import { OrbitControls, OrthographicCamera } from "@react-three/drei";
 import { Suspense } from "react";
@@ -40,20 +40,7 @@ export default function Home() {
   const [isLoading, setIsLoading] = useState(false); // State baru untuk loading screen
   const [isFadingOut, setIsFadingOut] = useState(false); // State baru untuk efek memudar
 
-  // Efek untuk Autoplay saat pertama kali web dibuka
-  // useEffect(() => {
-  //   if (audioRef.current) {
-  //     audioRef.current.play()
-  //       .then(() => {
-  //         setIsPlaying(true);
-  //         fadeInAudio(); // Panggil fade in!
-  //       })
-  //       .catch((err) => {
-  //         // Beberapa browser memblokir autoplay sebelum user berinteraksi dengan halaman
-  //         console.log("Autoplay diblokir oleh browser. Lagu akan menyala setelah klik pertama.", err);
-  //       });
-  //   }
-  // }, []);
+
 
   // Perbaikan Fungsi ketika tombol "Buka Undangan" diklik di Cover halaman
   const handleOpenInvitation = () => {
