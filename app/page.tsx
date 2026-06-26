@@ -22,6 +22,7 @@ import CoupleModalBox from "@/components/CoupleModalBox";
 import GiftModalBox from "@/components/GiftModalBox";
 import HeadphoneModalBox from "@/components/AudioModalBox";
 import AudioModalBox from "@/components/AudioModalBox";
+import WeddingCover from "@/components/WeddingCover";
 
 export default function Home() {
   const [activeModel, setActiveModel] = useState<string | null>(null);
@@ -32,6 +33,8 @@ export default function Home() {
   const [wasPlayingBeforeModal, setWasPlayingBeforeModal] = useState(false);
 
   const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const [isCoverOpen, setIsCoverOpen] = useState(true);
 
   // Efek untuk Autoplay saat pertama kali web dibuka
   useEffect(() => {
@@ -47,6 +50,22 @@ export default function Home() {
         });
     }
   }, []);
+
+  // Fungsi ketika tombol "Buka Undangan" diklik
+  const handleOpenInvitation = () => {
+    setIsCoverOpen(false); // Menutup cover halaman
+
+    // Langsung mainkan musik latar secara halus begitu undangan dibuka!
+    if (audioRef.current) {
+      audioRef.current.volume = 0;
+      audioRef.current.play()
+        .then(() => {
+          setIsPlaying(true);
+          fadeInAudio();
+        })
+        .catch((err) => console.log("Autoplay blocked:", err));
+    }
+  };
 
   // Mengupdate progress bar
   const handleTimeUpdate = () => {
@@ -171,6 +190,13 @@ export default function Home() {
   return (
     <div style={{ minHeight: "100vh", position: "relative" }}>
     
+      {/* JIKA COVER AKTIF, TAMPILKAN COVER DI ATAS LAYER UTAMA */}
+      {isCoverOpen ? (
+        <WeddingCover onOpen={handleOpenInvitation} />
+      ) : (
+        <>
+      
+
       {/* 1. Element Audio diletakkan di luar <main> */}
       <audio 
         ref={audioRef}
@@ -303,15 +329,17 @@ export default function Home() {
         )} */}
       </main>
 
-      {/* 3. Modal Box juga di luar <main> karena sifatnya floating/overlay */}
-    <AudioModalBox 
-      isOpen={activeModel === "Headphone"} 
-      onClose={() => setActiveModel(null)} 
-      isPlaying={isPlaying}
-      togglePlay={togglePlay}
-      progress={progress}
-    />
+        {/* 3. Modal Box juga di luar <main> karena sifatnya floating/overlay */}
+      <AudioModalBox 
+        isOpen={activeModel === "Headphone"} 
+        onClose={() => setActiveModel(null)} 
+        isPlaying={isPlaying}
+        togglePlay={togglePlay}
+        progress={progress}
+      />
 
-  </div>
+      </>
+      )}
+    </div>
   );
 }
