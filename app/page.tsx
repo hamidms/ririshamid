@@ -23,6 +23,8 @@ import GiftModalBox from "@/components/GiftModalBox";
 import HeadphoneModalBox from "@/components/AudioModalBox";
 import AudioModalBox from "@/components/AudioModalBox";
 import WeddingCover from "@/components/WeddingCover";
+import LoadingScreen from "@/components/LoadingScreen";
+
 
 export default function Home() {
   const [activeModel, setActiveModel] = useState<string | null>(null);
@@ -35,6 +37,7 @@ export default function Home() {
   const audioRef = useRef<HTMLAudioElement | null>(null);
 
   const [isCoverOpen, setIsCoverOpen] = useState(true);
+  const [isLoading, setIsLoading] = useState(false); // State baru untuk loading screen
 
   // Efek untuk Autoplay saat pertama kali web dibuka
   useEffect(() => {
@@ -53,7 +56,8 @@ export default function Home() {
 
   // Fungsi ketika tombol "Buka Undangan" diklik
   const handleOpenInvitation = () => {
-    setIsCoverOpen(false); // Menutup cover halaman
+    setIsCoverOpen(false); // 1. Tutup cover halaman
+    setIsLoading(true);    // 2. Aktifkan loading screen tutorial
 
     // Langsung mainkan musik latar secara halus begitu undangan dibuka!
     if (audioRef.current) {
@@ -65,6 +69,11 @@ export default function Home() {
         })
         .catch((err) => console.log("Autoplay blocked:", err));
     }
+
+    // 4. Set waktu 2 detik (2000ms), lalu matikan loading screen untuk memunculkan dunia 3D
+    setTimeout(() => {
+      setIsLoading(false);
+    }, 2000);
   };
 
   // Mengupdate progress bar
@@ -190,12 +199,14 @@ export default function Home() {
   return (
     <div style={{ minHeight: "100vh", position: "relative" }}>
     
-      {/* JIKA COVER AKTIF, TAMPILKAN COVER DI ATAS LAYER UTAMA */}
-      {isCoverOpen ? (
-        <WeddingCover onOpen={handleOpenInvitation} />
-      ) : (
+{/* ALUR KONDISIONAL LAYER SEBELUM UTAMA
+    {isCoverOpen ? (
+      <WeddingCover onOpen={handleOpenInvitation} />
+    ) : isLoading ? (
+      <LoadingScreen /> // Muncul selama 2 detik mengalir ke bawah dengan bar animasi
+    ) : (
         <>
-      
+       */}
 
       {/* 1. Element Audio diletakkan di luar <main> */}
       <audio 
@@ -280,55 +291,56 @@ export default function Home() {
           />
         </Canvas>
 
-        {/* PANGGIL MODAL SEPARASI DI SINI */}
-        <CoupleModalBox 
-          isOpen={activeModel === "Couple"} 
-          onClose={() => setActiveModel(null)} 
-        />
-
-        <CalendarModalBox 
-          isOpen={activeModel === "Calendar"} 
-          onClose={() => setActiveModel(null)} 
-        />
-
-        <BookModalBox 
-          isOpen={activeModel === "Book"} 
-          onClose={() => setActiveModel(null)} 
-        />
-
-        {/* <PhoneModalBox 
-          isOpen={activeModel === "Phone"} 
-          onClose={() => setActiveModel(null)} 
-        /> */}
-
-        <PhoneModalBox 
-          isOpen={activeModel === "Phone"} 
-          onClose={handleClosePhoneModal} // Menggunakan fungsi handle khusus kita
-        />
-
-        <HeadphoneModalBox 
-          isOpen={activeModel === "Headphone"}
-          onClose={() => setActiveModel(null)} isPlaying={false} togglePlay={function (): void {
-            throw new Error("Function not implemented.");
-          } } progress={0}        />
-
-        <GiftModalBox isOpen={isGiftOpen} onClose={() => setIsGiftOpen(false)} />
-
-        {/* DEFAULT POPUP UTK OBJEK SELAIN KALENDER (Jika Masih Perlu) */}
-        {/* {activeModel && activeModel !== "Calendar" && (
-          console.log("Active Model:", activeModel), // Debugging: Log model yang aktif
-          <div style={{
-            position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
-            width: "85vw", maxWidth: "1000px", height: "80vh", maxHeight: "600px",
-            backgroundColor: "#fbf9f5", color: "#333", padding: "40px", borderRadius: "16px",
-            boxShadow: "0 20px 50px rgba(0,0,0,0.3)", zIndex: 100
-          }}>
-            <button onClick={() => setActiveModel(null)} style={{ position: "absolute", top: "20px", right: "20px", cursor: "pointer" }}>✕</button>
-            <h1>Detail Objek: {activeModel}</h1>
-          </div>
-        )} */}
+        
       </main>
 
+{/* PANGGIL MODAL SEPARASI DI SINI */}
+      <CoupleModalBox 
+        isOpen={activeModel === "Couple"} 
+        onClose={() => setActiveModel(null)} 
+      />
+
+      <CalendarModalBox 
+        isOpen={activeModel === "Calendar"} 
+        onClose={() => setActiveModel(null)} 
+      />
+
+      <BookModalBox 
+        isOpen={activeModel === "Book"} 
+        onClose={() => setActiveModel(null)} 
+      />
+
+      {/* <PhoneModalBox 
+        isOpen={activeModel === "Phone"} 
+        onClose={() => setActiveModel(null)} 
+      /> */}
+
+      <PhoneModalBox 
+        isOpen={activeModel === "Phone"} 
+        onClose={handleClosePhoneModal} // Menggunakan fungsi handle khusus kita
+      />
+
+      <HeadphoneModalBox 
+        isOpen={activeModel === "Headphone"}
+        onClose={() => setActiveModel(null)} isPlaying={false} togglePlay={function (): void {
+          throw new Error("Function not implemented.");
+        } } progress={0}        />
+
+      <GiftModalBox isOpen={isGiftOpen} onClose={() => setIsGiftOpen(false)} />
+
+      {/* DEFAULT POPUP UTK OBJEK SELAIN KALENDER (Jika Masih Perlu) */}
+      {/* {activeModel && activeModel !== "Calendar" && (
+        console.log("Active Model:", activeModel), // Debugging: Log model yang aktif
+        <div style={{
+          position: "absolute", top: "50%", left: "50%", transform: "translate(-50%, -50%)",
+          width: "85vw", maxWidth: "1000px", height: "80vh", maxHeight: "600px",
+          backgroundColor: "#fbf9f5", color: "#333", padding: "40px", borderRadius: "16px",
+          boxShadow: "0 20px 50px rgba(0,0,0,0.3)", zIndex: 100
+        }}>
+          <button onClick={() => setActiveModel(null)} style={{ position: "absolute", top: "20px", right: "20px", cursor: "pointer" }}>✕</button>
+          <h1>Detail Objek: {activeModel}</h1>
+        </div>
+      )} */}
         {/* 3. Modal Box juga di luar <main> karena sifatnya floating/overlay */}
       <AudioModalBox 
         isOpen={activeModel === "Headphone"} 
@@ -338,8 +350,20 @@ export default function Home() {
         progress={progress}
       />
 
-      </>
-      )}
+      {/* ========================================================= */}
+      {/* LAYER 3 (ATAS): LOADING OVERLAY SCREEN                    */}
+      {/* Hanya muncul saat isLoading bernilai true                 */}
+      {/* ========================================================= */}
+      {isLoading && <LoadingScreen />}
+
+
+      {/* ========================================================= */}
+      {/* LAYER 4 (PALING ATAS): WEDDING COVER GATE                */}
+      {/* Menutup seluruh layar pertama kali sebelum diklik         */}
+      {/* ========================================================= */}
+      {isCoverOpen && <WeddingCover onOpen={handleOpenInvitation} />}
+
+      {/* )} */}
     </div>
   );
 }
