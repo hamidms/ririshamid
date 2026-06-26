@@ -358,9 +358,15 @@ export default function Home() {
       {/* LAYER 4 (PALING ATAS): WEDDING COVER GATE                */}
       {/* Menutup seluruh layar pertama kali sebelum diklik         */}
       {/* ========================================================= */}
-      {isCoverOpen && <WeddingCover onOpen={handleOpenInvitation} />}
+      {isCoverOpen && (
+        <Suspense fallback={
+          // Tampilan sementara (fallback) saat Next.js sedang memproses parameter URL
+          <div style={{ backgroundColor: "#000", width: "100vw", height: "100vh" }} />
+        }>
+          <WeddingCover onOpen={handleOpenInvitation} />
+        </Suspense>
+      )}
 
-      {/* )} */}
     </div>
   );
 }
