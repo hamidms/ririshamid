@@ -10,10 +10,12 @@ interface CalendarModalBoxProps {
 export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxProps) {
   if (!isOpen) return null;
 
+  // Data Tanggal (4 Hari)
   const calendarData = [
+    { dayName: "Kamis", date: 15, isHighlighted: false },
+    { dayName: "Jumat", date: 16, isHighlighted: false },
     { dayName: "Sabtu", date: 17, isHighlighted: false },
     { dayName: "Minggu", date: 18, isHighlighted: true },
-    { dayName: "Senin", date: 19, isHighlighted: false },
   ];
 
   // Data Rundown / Rangkaian Acara
@@ -51,7 +53,7 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
         fontFamily: "'Comic Sans MS', 'Chalkboard SE', 'Caveat', cursive, sans-serif",
       }}
     >
-      {/* TOMBOL SILANG (Sticky di pojok kanan atas) */}
+      {/* TOMBOL SILANG */}
       <button
         onClick={onClose}
         style={{
@@ -114,7 +116,7 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
             <div
               style={{
                 display: "grid",
-                gridTemplateColumns: "repeat(3, 1fr)",
+                gridTemplateColumns: `repeat(${calendarData.length}, 1fr)`,
                 width: "100%",
                 borderTop: "3px solid #2d5a27",
                 borderBottom: "3px solid #2d5a27",
@@ -127,7 +129,7 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
                     display: "flex",
                     flexDirection: "column",
                     alignItems: "center",
-                    borderRight: idx < 2 ? "3px solid #2d5a27" : "none",
+                    borderRight: idx < calendarData.length - 1 ? "3px solid #2d5a27" : "none",
                     paddingBottom: "15px",
                   }}
                 >
@@ -137,7 +139,7 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
                       textAlign: "center",
                       padding: "8px 0",
                       borderBottom: "3px solid #2d5a27",
-                      fontSize: "1.2rem",
+                      fontSize: "1rem",
                       fontWeight: "bold",
                       color: "#2d5a27",
                     }}
@@ -147,7 +149,7 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
 
                   <div
                     style={{
-                      height: "110px",
+                      height: "100px",
                       display: "flex",
                       alignItems: "center",
                       justifyContent: "center",
@@ -157,7 +159,7 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
                   >
                     <span
                       style={{
-                        fontSize: "3.5rem",
+                        fontSize: "2.8rem",
                         fontWeight: "900",
                         color: "#2d5a27",
                         zIndex: 2,
@@ -170,8 +172,8 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
                       <svg
                         style={{
                           position: "absolute",
-                          width: "95px",
-                          height: "95px",
+                          width: "80px",
+                          height: "80px",
                           zIndex: 3,
                           pointerEvents: "none",
                         }}
@@ -235,7 +237,6 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
                   borderBottom: "1px solid rgba(45, 90, 39, 0.25)",
                 }}
               >
-                {/* JAM */}
                 <span
                   style={{
                     fontSize: "1.1rem",
@@ -248,7 +249,6 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
                   {item.time}
                 </span>
 
-                {/* ICON LOVE */}
                 <span
                   style={{
                     fontSize: "1.1rem",
@@ -260,7 +260,6 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
                   ♥
                 </span>
 
-                {/* NAMA ACARA */}
                 <span
                   style={{
                     fontSize: "1rem",

@@ -38,29 +38,17 @@ function SmoothOrbitControls({
   onEnd: () => void;
 }) {
   const controlsRef = useRef<OrbitControlsImpl | null>(null);
-  
-  // Kecepatan target saat berputar (0.5 = lambat dan elegan)
-  const TARGET_SPEED = 0.5; 
-  // Ref untuk menyimpan kecepatan saat ini secara presisi
+  const TARGET_SPEED = 0.5;
   const currentSpeedRef = useRef(0);
 
   useFrame((_, delta) => {
     if (!controlsRef.current) return;
 
-    // Tentukan kecepatan tujuan: jika harus berputar -> TARGET_SPEED, jika tidak -> 0
     const target = shouldRotate ? TARGET_SPEED : 0;
-
-    // LERP (Linear Interpolation) untuk efek percepatan/perlambatan halus (fade in/out)
-    // Angka 2.0 menentukan seberapa halus transisinya (makin kecil makin halus)
     currentSpeedRef.current += (target - currentSpeedRef.current) * (delta * 2.0);
 
-    // Terapkan kecepatan ke OrbitControls
     controlsRef.current.autoRotateSpeed = currentSpeedRef.current;
-    
-    // Aktifkan autoRotate jika kecepatannya masih di atas 0.001
     controlsRef.current.autoRotate = currentSpeedRef.current > 0.001;
-    
-    // Penting: Update kontrol tiap frame agar transisi ter-render mulus
     controlsRef.current.update();
   });
 
@@ -86,31 +74,32 @@ function Scene3D({
   setActiveModel,
   handleOpenPhoneModal,
   setIsGiftOpen,
+  setIsInteracting,
 }: {
   setActiveModel: (model: string | null) => void;
   handleOpenPhoneModal: () => void;
   setIsGiftOpen: (open: boolean) => void;
+  setIsInteracting: (interacting: boolean) => void;
 }) {
   const [shouldRotate, setShouldRotate] = useState(true);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Dipanggil saat user mulai menyentuh/menggeser/drag layar
   const handleStart = () => {
-    // Stop status rotasi (kecepatan akan melambat halus ke 0)
     setShouldRotate(false);
+    setIsInteracting(true); // Sembunyikan footer saat pengguna berinteraksi / drag
 
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
   };
 
-  // Dipanggil saat user melepas sentuhan/mouse setelah drag/scroll
   const handleEnd = () => {
+    setIsInteracting(false); // Tampilkan kembali footer saat sentuhan dilepas
+
     if (timeoutRef.current) {
       clearTimeout(timeoutRef.current);
     }
 
-    // Hitung mundur 5 detik (5000 ms) setelah lepas sentuhan, baru berputar perlahan lagi
     timeoutRef.current = setTimeout(() => {
       setShouldRotate(true);
     }, 5000);
@@ -118,7 +107,13 @@ function Scene3D({
 
   return (
     <>
-      <OrthographicCamera makeDefault position={[10, 15, 15]} zoom={70} near={0.1} far={1000} />
+      <OrthographicCamera 
+        makeDefault 
+        position={[8, 18, 10]} 
+        zoom={85} 
+        near={0.1} 
+        far={1000} 
+      />
 
       <ambientLight intensity={0.9} />
       <directionalLight position={[10, 15, 10]} intensity={1.8} />
@@ -170,6 +165,9 @@ function Scene3D({
         shouldRotate={shouldRotate}
         onStart={handleStart}
         onEnd={handleEnd}
+        target={[0, -1.2, 0]} // Ubah target Y menjadi minus (misal -1.2 atau -1.5)
+        maxPolarAngle={Math.PI / 3}
+        minPolarAngle={Math.PI / 6}
       />
     </>
   );
@@ -190,6 +188,16 @@ export default function Home() {
   const [isCoverOpen, setIsCoverOpen] = useState(true);
   const [isLoading, setIsLoading] = useState(false);
   const [isFadingOut, setIsFadingOut] = useState(false);
+
+  // State untuk melacak interaksi pengguna
+  const [isInteracting, setIsInteracting] = useState(false);
+
+  // Cek apakah ada modal atau cover yang sedang aktif
+  const isAnyModalOpen =
+    isCoverOpen ||
+    isLoading ||
+    activeModel !== null ||
+    isGiftOpen;
 
   const handleOpenInvitation = () => {
     setIsCoverOpen(false);
@@ -336,8 +344,50 @@ export default function Home() {
             setActiveModel={setActiveModel}
             handleOpenPhoneModal={handleOpenPhoneModal}
             setIsGiftOpen={setIsGiftOpen}
+            setIsInteracting={setIsInteracting}
           />
         </Canvas>
+
+        {/* FOOTER MENGAMBANG TRANSPARAN */}
+        {/* FOOTER MENGAMBANG TRANSPARAN */}
+        <div
+          style={{
+            position: "fixed",
+            bottom: "16px",
+            left: "50%",
+            transform: "translateX(-50%)",
+            backgroundColor: "rgba(255, 255, 255, 0.15)",
+            backdropFilter: "blur(10px)",
+            WebkitBackdropFilter: "blur(10px)",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
+            borderRadius: "9999px",
+            padding: "5px 14px",
+            display: "flex",
+            alignItems: "center",
+            gap: "5px",
+            color: "#ffffff",
+            fontFamily: "Arial, sans-serif",
+            fontSize: "0.72rem",
+            fontWeight: "500",
+            letterSpacing: "0.2px",
+            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)",
+            zIndex: 50,
+            pointerEvents: "none",
+            whiteSpace: "nowrap", // Memastikan teks tetap 1 baris
+            maxWidth: "90vw",     // Menyesuaikan lebar layar HP
+            transition: "opacity 0.4s ease, transform 0.4s ease",
+            opacity: isInteracting || isAnyModalOpen ? 0 : 1,
+            transform: isInteracting || isAnyModalOpen 
+              ? "translate(-50%, 15px)" 
+              : "translate(-50%, 0)",
+          }}
+        >
+          <span>Made with</span>
+          <span style={{ color: "#ffffff", fontSize: "0.75rem", display: "inline-flex", alignItems: "center" }}>
+            🤍
+          </span>
+          <span>for my bini</span>
+        </div>
       </main>
 
       <CoupleModalBox isOpen={activeModel === "Couple"} onClose={() => setActiveModel(null)} />

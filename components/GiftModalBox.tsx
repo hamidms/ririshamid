@@ -18,9 +18,9 @@ export default function GiftModalBox({ isOpen, onClose }: GiftModalBoxProps) {
       id: 1,
       type: "bank",
       name: "Shalsabilla Rizky Rezatama",
-      contentValue: "7064928175", // Nomor Rekening
-      displayValue: "7064 9281 75",
-      labelLogo: "CIMB NIAGA",
+      contentValue: "2002709875", // Nomor Rekening
+      displayValue: "2002 7098 75",
+      labelLogo: "BSN",
       bgImage: "/gallery/gift/couple1.jpg",
       actionUrl: "https://wa.me/6282328928848?text=Halo%2C%20ini%20aku%20kasih%20hadiah" // Link WA
     },

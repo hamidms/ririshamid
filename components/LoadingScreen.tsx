@@ -76,21 +76,21 @@ export default function LoadingScreen({ isFadingOut }: LoadingScreenProps) {
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
           <div style={{ fontSize: "1.5rem", marginBottom: "8px" }}>🫳</div>
           <p style={{ fontFamily: "Arial, sans-serif", fontSize: "0.82rem", margin: 0, opacity: 0.85, lineHeight: "1.4" }}>
-            drag around to move camera.
+            Geser layar buat putar kamera.
           </p>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
           <div style={{ fontSize: "1.5rem", marginBottom: "8px" }}>👆</div>
           <p style={{ fontFamily: "Arial, sans-serif", fontSize: "0.82rem", margin: 0, opacity: 0.85, lineHeight: "1.4" }}>
-            tap to interact with objects.
+            Ketuk objek untuk interaksi.
           </p>
         </div>
 
         <div style={{ display: "flex", flexDirection: "column", alignItems: "center", textAlign: "center" }}>
           <div style={{ fontSize: "1.5rem", marginBottom: "8px" }}>🪲</div>
           <p style={{ fontFamily: "Arial, sans-serif", fontSize: "0.82rem", margin: 0, opacity: 0.85, lineHeight: "1.4" }}>
-            if something doesn't work, let me know!
+            Kalau ada error/bug, kabari ya!
           </p>
         </div>
       </div>
