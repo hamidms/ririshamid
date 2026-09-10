@@ -71,7 +71,8 @@ function SmoothOrbitControls({
       dampingFactor={0.15}
       minZoom={50}
       maxZoom={250}
-      maxPolarAngle={Math.PI / 1}
+      maxPolarAngle={Math.PI / 2.5}
+      minPolarAngle={Math.PI / 6}
       onStart={onStart}
       onEnd={onEnd}
     />
@@ -117,7 +118,7 @@ function Scene3D({
 
   return (
     <>
-      <OrthographicCamera makeDefault position={[12, 12, 12]} zoom={110} near={0.1} far={1000} />
+      <OrthographicCamera makeDefault position={[10, 15, 15]} zoom={70} near={0.1} far={1000} />
 
       <ambientLight intensity={0.9} />
       <directionalLight position={[10, 15, 10]} intensity={1.8} />
