@@ -377,9 +377,7 @@ export default function Home() {
             maxWidth: "90vw",     // Menyesuaikan lebar layar HP
             transition: "opacity 0.4s ease, transform 0.4s ease",
             opacity: isInteracting || isAnyModalOpen ? 0 : 1,
-            transform: isInteracting || isAnyModalOpen 
-              ? "translate(-50%, 15px)" 
-              : "translate(-50%, 0)",
+            // transform: isInteracting || isAnyModalOpen ? "translate(-50%, 20px)" : "translate(-50%, 0)",
           }}
         >
           <span>Made with</span>
