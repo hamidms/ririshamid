@@ -165,9 +165,9 @@ function Scene3D({
         shouldRotate={shouldRotate}
         onStart={handleStart}
         onEnd={handleEnd}
-        target={[0, -1.2, 0]} // Ubah target Y menjadi minus (misal -1.2 atau -1.5)
-        maxPolarAngle={Math.PI / 3}
-        minPolarAngle={Math.PI / 6}
+        // target={[0, -1.2, 0]} // Ubah target Y menjadi minus (misal -1.2 atau -1.5)
+        // maxPolarAngle={Math.PI / 3}
+        // minPolarAngle={Math.PI / 6}
       />
     </>
   );
