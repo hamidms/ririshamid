@@ -9,16 +9,17 @@ interface PhoneModalBoxProps {
 }
 
 // ==========================================
-// INTERFACE UNTUK DATA PESAN SUPABASE
+// INTERFACE UNTUK DATA PESAN SUPABASE (TABEL TAMU)
 // ==========================================
 interface MessageData {
   id: number;
+  nama: string;
   pesan: string;
   kehadiran: string;
   jumlah_orang: number;
   audio_url: string;
-  created_at: string;
-  nama_tamu?: string;
+  created_at?: string;
+  updated_at?: string;
 }
 
 // ==========================================
@@ -44,104 +45,115 @@ function MessageList({ refreshTrigger }: { refreshTrigger: number }) {
     };
 
     fetchMessages();
-  }, [refreshTrigger]); // Akan fetch ulang setiap kali refreshTrigger berubah
+  }, [refreshTrigger]);
 
   if (loading) {
-    return <div style={{ textAlign: "center", padding: "20px 0", color: "#7a695e", fontFamily: "sans-serif", fontSize: "0.9rem" }}>Memuat ucapan...</div>;
+    return (
+      <div style={{ textAlign: "center", padding: "20px 0", color: "#7a695e", fontFamily: "sans-serif", fontSize: "0.9rem" }}>
+        Memuat ucapan...
+      </div>
+    );
   }
 
   if (messages.length === 0) {
-    return <div style={{ textAlign: "center", padding: "20px 0", color: "#aba094", fontStyle: "italic", fontFamily: "sans-serif", fontSize: "0.85rem" }}>Belum ada ucapan yang tersimpan.</div>;
+    return (
+      <div style={{ textAlign: "center", padding: "20px 0", color: "#aba094", fontStyle: "italic", fontFamily: "sans-serif", fontSize: "0.85rem" }}>
+        Belum ada ucapan yang tersimpan.
+      </div>
+    );
   }
 
   return (
     <div style={{ marginTop: "10px" }}>
-      <h3 style={{ 
-        fontFamily: "'Georgia', serif", 
-        fontSize: "1.4rem", 
-        fontStyle: "italic", 
-        color: "#4a3b32", 
-        marginBottom: "16px",
-        borderTop: "1px dashed rgba(74, 59, 50, 0.15)",
-        paddingTop: "24px"
-      }}>
+      <h3
+        style={{
+          fontFamily: "'Georgia', serif",
+          fontSize: "1.4rem",
+          fontStyle: "italic",
+          color: "#4a3b32",
+          marginBottom: "16px",
+          borderTop: "1px dashed rgba(74, 59, 50, 0.15)",
+          paddingTop: "24px",
+        }}
+      >
         Ucapan & Voice Note Tamu
       </h3>
-      
-      {/* Grid Layout Layout Menggunakan Inline Style Flex / Block Responsif */}
-      <div style={{ 
-        display: "flex", 
-        flexDirection: "column", 
-        gap: "16px" 
-      }}>
-        {messages.map((item) => (
-          <div 
-            key={item.id} 
-            style={{
-              backgroundColor: "#ffffff",
-              padding: "16px",
-              borderRadius: "12px",
-              border: "1px solid #e3dcce",
-              boxShadow: "0 2px 8px rgba(74, 59, 50, 0.05)",
-              display: "flex",
-              flexDirection: "column",
-              gap: "12px"
-            }}
-          >
-            {/* Bagian Atas Informasi Tamu */}
-            <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
-              <span style={{
-                fontSize: "0.75rem",
-                fontWeight: "bold",
-                fontFamily: "sans-serif",
-                padding: "4px 8px",
-                borderRadius: "6px",
-                backgroundColor: item.kehadiran === "tidak-hadir" ? "rgba(214, 48, 49, 0.1)" : "rgba(74, 59, 50, 0.08)",
-                color: item.kehadiran === "tidak-hadir" ? "#d63031" : "#4a3b32"
-              }}>
-                {item.kehadiran === "tidak-hadir" ? "❌ Absen" : `✅ Hadir (${item.jumlah_orang} Orang)`}
-              </span>
-              <span style={{ fontSize: "0.7rem", color: "#aba094", fontFamily: "sans-serif" }}>
-                {new Date(item.created_at).toLocaleDateString("id-ID", {
-                  hour: "2-digit",
-                  minute: "2-digit"
-                })}
-              </span>
+
+      <div style={{ display: "flex", flexDirection: "column", gap: "16px" }}>
+        {messages.map((item) => {
+          const timeStamp = item.updated_at || item.created_at;
+
+          return (
+            <div
+              key={item.id}
+              style={{
+                backgroundColor: "#ffffff",
+                padding: "16px",
+                borderRadius: "12px",
+                border: "1px solid #e3dcce",
+                boxShadow: "0 2px 8px rgba(74, 59, 50, 0.05)",
+                display: "flex",
+                flexDirection: "column",
+                gap: "12px",
+              }}
+            >
+              {/* Bagian Atas Informasi Tamu */}
+              <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                <span
+                  style={{
+                    fontSize: "0.75rem",
+                    fontWeight: "bold",
+                    fontFamily: "sans-serif",
+                    padding: "4px 8px",
+                    borderRadius: "6px",
+                    backgroundColor: item.kehadiran === "tidak-hadir" ? "rgba(214, 48, 49, 0.1)" : "rgba(74, 59, 50, 0.08)",
+                    color: item.kehadiran === "tidak-hadir" ? "#d63031" : "#4a3b32",
+                  }}
+                >
+                  {item.kehadiran === "tidak-hadir" ? "❌ Absen" : `✅ Hadir (${item.jumlah_orang} Orang)`}
+                </span>
+                {timeStamp && (
+                  <span style={{ fontSize: "0.7rem", color: "#aba094", fontFamily: "sans-serif" }}>
+                    {new Date(timeStamp).toLocaleDateString("id-ID", {
+                      hour: "2-digit",
+                      minute: "2-digit",
+                    })}
+                  </span>
+                )}
+              </div>
+
+              {/* Nama Pengirim jika ada */}
+              {item.nama && (
+                <div style={{ fontSize: "0.85rem", fontWeight: "bold", color: "#4a3b32", fontFamily: "sans-serif" }}>
+                  Dari: {item.nama}
+                </div>
+              )}
+
+              {/* Konten Pesan */}
+              <p
+                style={{
+                  fontFamily: "sans-serif",
+                  fontSize: "0.9rem",
+                  color: "#3e3129",
+                  margin: 0,
+                  lineHeight: "1.4",
+                  whiteSpace: "pre-wrap",
+                  fontStyle: "italic",
+                }}
+              >
+                "{item.pesan || "Tanpa pesan teks."}"
+              </p>
+
+              {/* Konten Audio VN jika tersedia */}
+              {item.audio_url && (
+                <div style={{ display: "flex", flexDirection: "column", gap: "4px", paddingTop: "4px" }}>
+                  <span style={{ fontSize: "0.75rem", color: "#7a695e", fontFamily: "sans-serif", fontWeight: "bold" }}>🎙️ Voice Note:</span>
+                  <audio src={item.audio_url} controls preload="metadata" style={{ width: "100%", height: "32px" }} />
+                </div>
+              )}
             </div>
-
-            {/* Nama Pengirim jika ada */}
-            {item.nama_tamu && (
-              <div style={{ fontSize: "0.85rem", fontWeight: "bold", color: "#4a3b32", fontFamily: "sans-serif" }}>
-                Dari: {item.nama_tamu}
-              </div>
-            )}
-
-            {/* Konten Pesan */}
-            <p style={{
-              fontFamily: "sans-serif",
-              fontSize: "0.9rem",
-              color: "#3e3129",
-              margin: 0,
-              lineHeight: "1.4",
-              whiteSpace: "pre-wrap",
-              fontStyle: "italic"
-            }}>
-              "{item.pesan || "Tanpa pesan teks."}"
-            </p>
-
-            {/* Konten Audio VN jika tersedia */}
-            {item.audio_url && (
-              <div style={{ display: "flex", flexDirection: "column", gap: "4px", paddingTop: "4px" }}>
-                <span style={{ fontSize: "0.75rem", color: "#7a695e", fontFamily: "sans-serif", fontWeight: "bold" }}>🎙️ Voice Note:</span>
-                <audio 
-                  src={item.audio_url} 
-                  controls 
-                  style={{ width: "100%", height: "32px" }} 
-                />
-              </div>
-            )}
-          </div>
-        ))}
+          );
+        })}
       </div>
     </div>
   );
@@ -151,8 +163,6 @@ function MessageList({ refreshTrigger }: { refreshTrigger: number }) {
 // KOMPONEN UTAMA: PHONE MODAL BOX
 // ==========================================
 export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModalBoxProps) {
-  if (!isOpen) return null;
-
   // State Form
   const [pesan, setPesan] = useState("");
   const [kehadiran, setKehadiran] = useState("datang-sendiri");
@@ -171,6 +181,13 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
   const audioChunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
+  // Cleanup Object URL saat unmount/modal ditutup untuk mencegah memory leak
+  useEffect(() => {
+    return () => {
+      if (audioUrl) URL.revokeObjectURL(audioUrl);
+    };
+  }, [audioUrl]);
+
   // Efek menghitung durasi saat merekam
   useEffect(() => {
     if (isRecording) {
@@ -185,11 +202,26 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
     };
   }, [isRecording]);
 
+  if (!isOpen) return null;
+
+  // Deteksi MIME type audio yang didukung oleh browser
+  const getSupportedMimeType = () => {
+    const types = ["audio/webm", "audio/mp4", "audio/ogg", "audio/aac"];
+    for (const type of types) {
+      if (MediaRecorder.isTypeSupported(type)) {
+        return type;
+      }
+    }
+    return "";
+  };
+
   // Fungsi Mulai Merekam VN
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-      const mediaRecorder = new MediaRecorder(stream);
+      const mimeType = getSupportedMimeType();
+
+      const mediaRecorder = new MediaRecorder(stream, mimeType ? { mimeType } : undefined);
       mediaRecorderRef.current = mediaRecorder;
       audioChunksRef.current = [];
 
@@ -200,11 +232,16 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
       };
 
       mediaRecorder.onstop = () => {
-        const audioBlob = new Blob(audioChunksRef.current, { type: "audio/wav" });
-        const url = URL.createObjectURL(audioBlob);
-        setAudioBlob(audioBlob);
+        const finalMimeType = mediaRecorder.mimeType || "audio/webm";
+        const blob = new Blob(audioChunksRef.current, { type: finalMimeType });
+        const url = URL.createObjectURL(blob);
+
+        if (audioUrl) URL.revokeObjectURL(audioUrl);
+
+        setAudioBlob(blob);
         setAudioUrl(url);
-        stream.getTracks().forEach(track => track.stop());
+
+        stream.getTracks().forEach((track) => track.stop());
       };
 
       mediaRecorder.start();
@@ -226,8 +263,9 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
     }
   };
 
-  // Fungsi Menghapus Rekaman VN yang ada
+  // Fungsi Menghapus Rekaman VN
   const deleteRecording = () => {
+    if (audioUrl) URL.revokeObjectURL(audioUrl);
     setAudioBlob(null);
     setAudioUrl(null);
     setRecordingTime(0);
@@ -242,8 +280,7 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
-    // 1. HITUNG JUMLAH ORANG BERDASARKAN PILIHAN KEHADIRAN
+
     let jumlahOrang = 0;
     if (kehadiran === "datang-sendiri") {
       jumlahOrang = 1;
@@ -251,7 +288,6 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
       jumlahOrang = 2;
     }
 
-    // 2. Buat wadah FormData
     const formData = new FormData();
     formData.append("pesan", pesan);
     formData.append("kehadiran", kehadiran);
@@ -259,9 +295,14 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
     if (guestName) {
       formData.append("nama_tamu", guestName);
     }
-    
+
     if (audioBlob) {
-      const fileVN = new File([audioBlob], "voicenote.wav", { type: "audio/wav" });
+      const mime = audioBlob.type;
+      let ext = "webm";
+      if (mime.includes("mp4") || mime.includes("aac")) ext = "m4a";
+      if (mime.includes("ogg")) ext = "ogg";
+
+      const fileVN = new File([audioBlob], `voicenote.${ext}`, { type: mime });
       formData.append("voiceNote", fileVN);
     }
 
@@ -275,13 +316,11 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
 
       if (result.success) {
         alert("Pesan dan Voice Note kamu berhasil dikirim! 🎉");
-        
-        // Reset inputan form
+
         setPesan("");
         deleteRecording();
-        
-        // Picu pembaruan sub-komponen MessageList secara instan
-        setRefreshTrigger(prev => prev + 1);
+
+        setRefreshTrigger((prev) => prev + 1);
       } else {
         alert(`Gagal mengirim: ${result.error}`);
       }
@@ -292,32 +331,35 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
   };
 
   return (
-    <div style={{
-      position: "fixed",
-      top: "5%",
-      left: "5%",
-      width: "90vw",
-      height: "88vh",
-      backgroundColor: "#fbf9f5", 
-      borderRadius: "24px",
-      boxShadow: "0 15px 40px rgba(0,0,0,0.3)",
-      zIndex: 999,
-      boxSizing: "border-box",
-      display: "flex",
-      flexDirection: "column",
-      backgroundImage: "linear-gradient(to right, rgba(74, 59, 50, 0.04) 1px, transparent 1px)",
-      backgroundSize: "20px 100%",
-      overflow: "hidden"
-    }}>
-      
-      {/* HEADER AREA (FIXED - TIDAK IKUT KESCROLL) */}
-      <div style={{
-        padding: "25px 20px 15px 20px",
-        position: "relative",
-        borderBottom: "1px dashed rgba(74, 59, 50, 0.1)"
-      }}>
-        <button 
-          onClick={onClose} 
+    <div
+      style={{
+        position: "fixed",
+        top: "5%",
+        left: "5%",
+        width: "90vw",
+        height: "88vh",
+        backgroundColor: "#fbf9f5",
+        borderRadius: "24px",
+        boxShadow: "0 15px 40px rgba(0,0,0,0.3)",
+        zIndex: 999,
+        boxSizing: "border-box",
+        display: "flex",
+        flexDirection: "column",
+        backgroundImage: "linear-gradient(to right, rgba(74, 59, 50, 0.04) 1px, transparent 1px)",
+        backgroundSize: "20px 100%",
+        overflow: "hidden",
+      }}
+    >
+      {/* HEADER AREA */}
+      <div
+        style={{
+          padding: "25px 20px 15px 20px",
+          position: "relative",
+          borderBottom: "1px dashed rgba(74, 59, 50, 0.1)",
+        }}
+      >
+        <button
+          onClick={onClose}
           style={{
             position: "absolute",
             top: "20px",
@@ -335,20 +377,22 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
             alignItems: "center",
             justifyContent: "center",
             zIndex: 1000,
-            boxShadow: "0 3px 8px rgba(0,0,0,0.2)"
+            boxShadow: "0 3px 8px rgba(0,0,0,0.2)",
           }}
         >
           ✕
         </button>
 
-        <h1 style={{ 
-          fontFamily: "'Georgia', serif", 
-          fontSize: "2.4rem", 
-          fontStyle: "italic", 
-          fontWeight: "normal", 
-          color: "#4a3b32", 
-          margin: 0 
-        }}>
+        <h1
+          style={{
+            fontFamily: "'Georgia', serif",
+            fontSize: "2.4rem",
+            fontStyle: "italic",
+            fontWeight: "normal",
+            color: "#4a3b32",
+            margin: 0,
+          }}
+        >
           Kirim Pesan
         </h1>
 
@@ -357,18 +401,21 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
             Dari: <strong>{guestName}</strong>
           </p>
         )}
-        
-        <div style={{ 
-          width: "100%", 
-          height: "10px", 
-          backgroundImage: "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 12' width='100%25' height='12' preserveAspectRatio='none'%3E%3Cpath d='M0,6 C150,12 150,0 300,6 C450,12 450,0 600,6 C750,12 750,0 900,6 C1050,12 1050,0 1200,6' fill='none' stroke='%234a3b32' stroke-width='2'/%3E%3C/svg%3E\")",
-          backgroundRepeat: "repeat-x", 
-          margin: "8px 0 0 0"
-        }} />
+
+        <div
+          style={{
+            width: "100%",
+            height: "10px",
+            backgroundImage:
+              "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 12' width='100%25' height='12' preserveAspectRatio='none'%3E%3Cpath d='M0,6 C150,12 150,0 300,6 C450,12 450,0 600,6 C750,12 750,0 900,6 C1050,12 1050,0 1200,6' fill='none' stroke='%234a3b32' stroke-width='2'/%3E%3C/svg%3E\")",
+            backgroundRepeat: "repeat-x",
+            margin: "8px 0 0 0",
+          }}
+        />
       </div>
 
       {/* AREA FORM & LIST (SCROLLABLE) */}
-      <form 
+      <form
         onSubmit={handleSubmit}
         style={{
           flex: 1,
@@ -377,10 +424,10 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
           display: "flex",
           flexDirection: "column",
           gap: "24px",
-          WebkitOverflowScrolling: "touch"
+          WebkitOverflowScrolling: "touch",
         }}
       >
-        {/* 1. INPUT TEXT: SILAKAN MASUKKAN PESAN */}
+        {/* 1. INPUT TEXT */}
         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
           <label style={{ fontFamily: "'Georgia', serif", fontStyle: "italic", color: "#4a3b32", fontSize: "1.1rem" }}>
             Silakan masukkan pesan:
@@ -401,7 +448,7 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
               fontSize: "0.9rem",
               color: "#3e3129",
               boxSizing: "border-box",
-              outline: "none"
+              outline: "none",
             }}
           />
         </div>
@@ -415,9 +462,20 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
             {[
               { id: "tidak-hadir", label: "Tidak bisa hadir" },
               { id: "datang-sendiri", label: "Datang sendiri" },
-              { id: "datang-berdua", label: "Datang berdua" }
+              { id: "datang-berdua", label: "Datang berdua" },
             ].map((option) => (
-              <label key={option.id} style={{ display: "flex", alignItems: "center", gap: "10px", fontSize: "0.95rem", color: "#5c4d42", fontFamily: "sans-serif", cursor: "pointer" }}>
+              <label
+                key={option.id}
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  gap: "10px",
+                  fontSize: "0.95rem",
+                  color: "#5c4d42",
+                  fontFamily: "sans-serif",
+                  cursor: "pointer",
+                }}
+              >
                 <input
                   type="radio"
                   name="kehadiran"
@@ -432,24 +490,25 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
           </div>
         </div>
 
-        {/* 3. MODUL PEREKAM VOICE NOTE INTERAKTIF */}
+        {/* 3. MODUL VOICE NOTE */}
         <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
           <label style={{ fontFamily: "'Georgia', serif", fontStyle: "italic", color: "#4a3b32", fontSize: "1.1rem" }}>
             Pesan Suara / Voice Note (Opsional):
           </label>
-          
-          <div style={{
-            border: "1px dashed #c9bda7",
-            borderRadius: "12px",
-            padding: "20px",
-            backgroundColor: "rgba(255, 255, 255, 0.6)",
-            display: "flex",
-            flexDirection: "column",
-            alignItems: "center",
-            gap: "12px",
-            boxSizing: "border-box"
-          }}>
-            
+
+          <div
+            style={{
+              border: "1px dashed #c9bda7",
+              borderRadius: "12px",
+              padding: "20px",
+              backgroundColor: "rgba(255, 255, 255, 0.6)",
+              display: "flex",
+              flexDirection: "column",
+              alignItems: "center",
+              gap: "12px",
+              boxSizing: "border-box",
+            }}
+          >
             {!isRecording && !audioUrl && (
               <button
                 type="button"
@@ -459,14 +518,14 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
                   alignItems: "center",
                   gap: "8px",
                   padding: "10px 18px",
-                  backgroundColor: "#1e56e3", 
+                  backgroundColor: "#1e56e3",
                   color: "white",
                   border: "none",
                   borderRadius: "20px",
                   cursor: "pointer",
                   fontWeight: "bold",
                   fontFamily: "sans-serif",
-                  fontSize: "0.85rem"
+                  fontSize: "0.85rem",
                 }}
               >
                 🎙️ Mulai Rekam VN
@@ -476,10 +535,16 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
             {isRecording && (
               <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
                 <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <span style={{
-                    width: "10px", height: "10px", backgroundColor: "#d63031", borderRadius: "50%",
-                    animation: "pulse 1s infinite alternate"
-                  }} />
+                  <span
+                    style={{
+                      width: "100%",
+                      height: "10px",
+                      maxWidth: "10px",
+                      backgroundColor: "#d63031",
+                      borderRadius: "50%",
+                      animation: "pulse 1s infinite alternate",
+                    }}
+                  />
                   <span style={{ fontFamily: "monospace", fontSize: "1.2rem", fontWeight: "bold", color: "#4a3b32" }}>
                     {formatTime(recordingTime)}
                   </span>
@@ -495,7 +560,7 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
                     borderRadius: "20px",
                     cursor: "pointer",
                     fontSize: "0.85rem",
-                    fontWeight: "bold"
+                    fontWeight: "bold",
                   }}
                 >
                   ⏹️ Selesai
@@ -505,7 +570,7 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
 
             {audioUrl && !isRecording && (
               <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
-                <audio src={audioUrl} controls style={{ width: "100%", maxWidth: "260px" }} />
+                <audio src={audioUrl} controls preload="metadata" style={{ width: "100%", maxWidth: "260px" }} />
                 <button
                   type="button"
                   onClick={deleteRecording}
@@ -517,24 +582,23 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
                     borderRadius: "12px",
                     cursor: "pointer",
                     fontSize: "0.75rem",
-                    fontWeight: "500"
+                    fontWeight: "500",
                   }}
                 >
                   🗑️ Hapus & Rekam Ulang
                 </button>
               </div>
             )}
-
           </div>
         </div>
 
-        {/* 4. TOMBOL SUBMIT FORM */}
+        {/* 4. TOMBOL SUBMIT */}
         <button
           type="submit"
           style={{
             marginTop: "10px",
             padding: "14px",
-            backgroundColor: "#4a3b32", 
+            backgroundColor: "#4a3b32",
             color: "#fbf9f5",
             border: "none",
             borderRadius: "8px",
@@ -542,15 +606,14 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
             fontSize: "1.1rem",
             fontStyle: "italic",
             cursor: "pointer",
-            boxShadow: "0 4px 12px rgba(74, 59, 50, 0.2)"
+            boxShadow: "0 4px 12px rgba(74, 59, 50, 0.2)",
           }}
         >
           Kirim Pesan ➔
         </button>
 
-        {/* 5. TAMPILAN SUB-KOMPONEN MESSAGE LIST (BERADA DI BAWAH SUBMIT) */}
+        {/* 5. DAFTAR PESAN */}
         <MessageList refreshTrigger={refreshTrigger} />
-
       </form>
 
       <style>{`
@@ -559,7 +622,6 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
           to { opacity: 0.3; }
         }
       `}</style>
-
     </div>
   );
 }

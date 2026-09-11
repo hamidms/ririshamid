@@ -6,11 +6,13 @@ export const dynamic = "force-dynamic";
 
 export async function GET() {
   try {
-    // Mengambil data dan mengurutkannya dari yang paling baru (created_at desc)
+    // Ambil data dari tabel 'tamu' yang kolom 'pesan'-nya tidak NULL & tidak kosong
     const { data, error } = await supabase
-      .from("pesan_rsvp")
+      .from("tamu")
       .select("*")
-      .order("created_at", { ascending: false });
+      .not("pesan", "is", null)
+      .neq("pesan", "")
+      .order("updated_at", { ascending: false });
 
     if (error) {
       throw new Error(error.message);
@@ -19,6 +21,9 @@ export async function GET() {
     return NextResponse.json({ success: true, data });
   } catch (error: any) {
     console.error("Gagal mengambil data:", error);
-    return NextResponse.json({ success: false, error: error.message }, { status: 500 });
+    return NextResponse.json(
+      { success: false, error: error.message },
+      { status: 500 }
+    );
   }
 }
