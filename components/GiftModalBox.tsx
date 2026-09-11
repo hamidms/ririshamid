@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 interface GiftModalBoxProps {
   isOpen: boolean;
@@ -9,8 +9,22 @@ interface GiftModalBoxProps {
 
 export default function GiftModalBox({ isOpen, onClose }: GiftModalBoxProps) {
   const [copiedIndex, setCopiedIndex] = useState<number | null>(null);
+  const [shouldRender, setShouldRender] = useState(false);
+  const [animate, setAnimate] = useState(false);
 
-  if (!isOpen) return null;
+  useEffect(() => {
+    if (isOpen) {
+      setShouldRender(true);
+      const timer = setTimeout(() => setAnimate(true), 10);
+      return () => clearTimeout(timer);
+    } else {
+      setAnimate(false);
+      const timer = setTimeout(() => setShouldRender(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
+  if (!shouldRender) return null;
 
   // Data hadiah (2 ATM + 1 Alamat Fisik)
   const accountData = [
@@ -18,31 +32,31 @@ export default function GiftModalBox({ isOpen, onClose }: GiftModalBoxProps) {
       id: 1,
       type: "bank",
       name: "Shalsabilla Rizky Rezatama",
-      contentValue: "2002709875", // Nomor Rekening
+      contentValue: "2002709875",
       displayValue: "2002 7098 75",
       labelLogo: "BSN",
       bgImage: "/gallery/gift/couple1.jpg",
-      actionUrl: "https://wa.me/6282328928848?text=Halo%2C%20ini%20aku%20kasih%20hadiah" // Link WA
+      actionUrl: "https://wa.me/6282328928848?text=Halo%2C%20ini%20aku%20kasih%20hadiah"
     },
     {
       id: 2,
       type: "bank",
       name: "Hamid machfudin sukardi",
-      contentValue: "8045612398", // Nomor Rekening
+      contentValue: "8045612398",
       displayValue: "8045 6123 98",
       labelLogo: "BCA",
       bgImage: "/gallery/gift/couple2.jpg",
-      actionUrl: "https://wa.me/6282328928848?text=Halo%2C%20ini%20aku%20kasih%20hadiah" // Link WA
+      actionUrl: "https://wa.me/6282328928848?text=Halo%2C%20ini%20aku%20kasih%20hadiah"
     },
     {
       id: 3,
       type: "address",
       name: "Riris dan Hamid (Pak Eko BKK)",
-      contentValue: "Jalan Sidodadi RT 02 RW 03, Mijen, Kota Semarang", // Yang akan disalin
+      contentValue: "Jalan Sidodadi RT 02 RW 03, Mijen, Kota Semarang",
       displayValue: "Jalan Sidodadi RT 02 RW 03, Mijen, Kota Semarang",
-      labelLogo: "HADIAH", // Logo diganti teks/icon Hadiah
-      bgImage: "/gallery/gift/map.png", // Bisa disesuaikan filenya jika ada gambar khusus
-      actionUrl: "https://maps.app.goo.gl/hyKpSaUe3TvDLgzWA" // Link Google Maps
+      labelLogo: "HADIAH",
+      bgImage: "/gallery/gift/map.png",
+      actionUrl: "https://maps.app.goo.gl/hyKpSaUe3TvDLgzWA"
     }
   ];
 
@@ -54,51 +68,72 @@ export default function GiftModalBox({ isOpen, onClose }: GiftModalBoxProps) {
 
   return (
     <>
-      {/* TOMBOL SILANG FIXED */}
-      <button 
-        onClick={onClose} 
+      {/* OVERLAY / BACKDROP DENGAN FADE */}
+      <div
+        onClick={onClose}
         style={{
           position: "fixed",
-          top: "calc(5% + 20px)",
-          right: "calc(5% + 20px)",
-          width: "35px",
-          height: "35px",
-          backgroundColor: "#d63031",
-          color: "white",
-          border: "none",
-          borderRadius: "50%",
-          fontSize: "16px",
-          fontWeight: "bold",
-          cursor: "pointer",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          backgroundColor: "rgba(0, 0, 0, 0.4)",
+          zIndex: 998,
+          opacity: animate ? 1 : 0,
+          transition: "opacity 300ms cubic-bezier(0.4, 0, 0.2, 1)",
+          backdropFilter: "blur(4px)"
+        }}
+      />
+
+      {/* WINDOW MODAL UTAMA DENGAN FADE & SCALE */}
+      <div
+        style={{
+          position: "fixed", 
+          top: "5%",
+          left: "5%",
+          width: "90vw",
+          height: "88vh", 
+          backgroundColor: "#f4f1ea", 
+          borderRadius: "24px",
+          boxShadow: "0 15px 40px rgba(0,0,0,0.3)",
+          zIndex: 999,
+          boxSizing: "border-box",
+          padding: "50px 16px 20px 16px",
           display: "flex",
+          flexDirection: "column",
           alignItems: "center",
-          justifyContent: "center",
-          zIndex: 1000,
-          boxShadow: "0 3px 10px rgba(0,0,0,0.3)"
+          overflowX: "hidden",
+          overflowY: "auto",
+          opacity: animate ? 1 : 0,
+          transform: animate ? "scale(1) translateY(0)" : "scale(0.95) translateY(20px)",
+          transition: "opacity 300ms cubic-bezier(0.4, 0, 0.2, 1), transform 300ms cubic-bezier(0.4, 0, 0.2, 1)"
         }}
       >
-        ✕
-      </button>
-
-      {/* WINDOW MODAL UTAMA */}
-      <div style={{
-        position: "fixed", 
-        top: "5%",
-        left: "5%",
-        width: "90vw",
-        height: "88vh", 
-        backgroundColor: "#f4f1ea", 
-        borderRadius: "24px",
-        boxShadow: "0 15px 40px rgba(0,0,0,0.3)",
-        zIndex: 999,
-        boxSizing: "border-box",
-        padding: "50px 16px 20px 16px",
-        display: "flex",
-        flexDirection: "column",
-        alignItems: "center",
-        overflowX: "hidden",
-        overflowY: "auto",
-      }}>
+        {/* TOMBOL SILANG */}
+        <button 
+          onClick={onClose} 
+          style={{
+            position: "absolute",
+            top: "20px",
+            right: "20px",
+            width: "35px",
+            height: "35px",
+            backgroundColor: "#d63031",
+            color: "white",
+            border: "none",
+            borderRadius: "50%",
+            fontSize: "16px",
+            fontWeight: "bold",
+            cursor: "pointer",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            zIndex: 1000,
+            boxShadow: "0 3px 10px rgba(0,0,0,0.3)"
+          }}
+        >
+          ✕
+        </button>
 
         {/* HEADER MODAL */}
         <div style={{ textAlign: "center", marginBottom: "25px", marginTop: "10px" }}>
@@ -175,17 +210,16 @@ export default function GiftModalBox({ isOpen, onClose }: GiftModalBoxProps) {
 
                 {/* INFO DATA UTAMA (REKENING / ALAMAT & NAMA) */}
                 <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
-                  {/* VALUE UTAMA (NOMOR REKENING / ALAMAT JALAN) */}
                   <span style={{
                     fontFamily: card.type === "bank" ? "monospace" : "Arial, sans-serif",
-                    fontSize: card.type === "bank" ? "0.9rem" : "0.6rem", // Alamat otomatis mengecil agar muat
+                    fontSize: card.type === "bank" ? "0.9rem" : "0.6rem",
                     fontWeight: "bold",
                     color: "#ffffff",
                     letterSpacing: card.type === "bank" ? "1.2px" : "normal",
                     textShadow: "1px 1px 3px rgba(0,0,0,0.95)",
                     lineHeight: "1.2",
                     display: "-webkit-box",
-                    WebkitLineClamp: 2, // Maksimal alamat memotong jadi 2 baris agar tetap rapi
+                    WebkitLineClamp: 2,
                     WebkitBoxOrient: "vertical",
                     overflow: "hidden",
                     textOverflow: "ellipsis"
@@ -193,7 +227,6 @@ export default function GiftModalBox({ isOpen, onClose }: GiftModalBoxProps) {
                     {card.displayValue}
                   </span>
                   
-                  {/* NAMA PEMILIK KARTU / PENERIMA */}
                   <span style={{
                     fontFamily: "monospace",
                     fontSize: "0.65rem",
@@ -223,7 +256,6 @@ export default function GiftModalBox({ isOpen, onClose }: GiftModalBoxProps) {
                 boxSizing: "border-box",
                 borderLeft: "1px solid rgba(0,0,0,0.04)"
               }}>
-                {/* Atas Kanan: Logo Bank atau Icon Hadiah */}
                 <div style={{
                   display: "flex",
                   justifyContent: "center",
@@ -232,7 +264,6 @@ export default function GiftModalBox({ isOpen, onClose }: GiftModalBoxProps) {
                   minHeight: "20px"
                 }}>
                   {card.labelLogo === "HADIAH" ? (
-                    /* TAMPILAN ICON KADO JIKA TIPE HADIAH FISIK */
                     <div style={{ display: "flex", alignItems: "center", gap: "2px", color: "#e67e22" }}>
                       <svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor">
                         <path d="M11 8V2.052c-2.313.251-4.5 1.583-4.5 3.948 0 2.213 1.944 3.391 4.5 3.911zm2-5.948V8c2.556-.52 4.5-1.697 4.5-3.911 0-2.365-2.187-3.697-4.5-3.948zM22 12v-2h-3.135c-.393-.761-.963-1.418-1.661-1.921 1.055-.426 1.796-1.464 1.796-2.67 0-1.996-1.846-3.409-4.5-3.409-1.396 0-2.645.402-3.5 1.042-.855-.64-2.104-1.042-3.5-1.042-2.654 0-4.5 1.413-4.5 3.409 0 1.206.741 2.244 1.796 2.67-.698.503-1.268 1.16-1.661 1.921H2v2h1v10c0 1.103.897 2 2 2h14c1.103 0 2-.897 2-2V12h1zM6.5 6c0-.853.691-1.409 1.5-1.409.807 0 1.5.556 1.5 1.409 0 .862-.689 1.411-1.5 1.411-.811 0-1.5-.549-1.5-1.411zm8.5 1.411c-.811 0-1.5-.549-1.5-1.411 0-.853.691-1.409 1.5-1.409.807 0 1.5.556 1.5 1.409 0 .862-.689 1.411-1.5 1.411zM11 12H5v8h6v-8zm8 8h-6v-8h6v8z"/>
@@ -240,7 +271,6 @@ export default function GiftModalBox({ isOpen, onClose }: GiftModalBoxProps) {
                       <span style={{ fontSize: "0.55rem", fontWeight: "900", letterSpacing: "0.5px" }}>GIFT</span>
                     </div>
                   ) : (
-                    /* TAMPILAN LOGO BANK BIASA */
                     <div style={{
                       fontFamily: "'Helvetica Neue', Arial, sans-serif",
                       fontWeight: "900",
@@ -255,7 +285,6 @@ export default function GiftModalBox({ isOpen, onClose }: GiftModalBoxProps) {
                   )}
                 </div>
 
-                {/* AREA DUA TOMBOL AKSI */}
                 <div style={{
                   display: "flex",
                   flexDirection: "column",
@@ -263,7 +292,6 @@ export default function GiftModalBox({ isOpen, onClose }: GiftModalBoxProps) {
                   width: "100%",
                   alignItems: "center"
                 }}>
-                  {/* TOMBOL DINAMIS: KONFIRMASI WA / BUKA MAPS */}
                   <button
                     onClick={() => window.open(card.actionUrl, "_blank")}
                     style={{
@@ -272,7 +300,7 @@ export default function GiftModalBox({ isOpen, onClose }: GiftModalBoxProps) {
                       justifyContent: "center",
                       width: "100%",
                       maxWidth: "85px",
-                      backgroundColor: card.type === "bank" ? "#25D366" : "#4285F4", // WA Hijau, Maps Biru Google
+                      backgroundColor: card.type === "bank" ? "#25D366" : "#4285F4",
                       color: "#ffffff",
                       border: "none",
                       padding: "5px 2px",
@@ -303,7 +331,6 @@ export default function GiftModalBox({ isOpen, onClose }: GiftModalBoxProps) {
                     </div>
                   </button>
 
-                  {/* TOMBOL SALIN (MENYALIN VALUE: REK / ALAMAT) */}
                   <button
                     onClick={() => handleCopy(card.contentValue, index)}
                     style={{
