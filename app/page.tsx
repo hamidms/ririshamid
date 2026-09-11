@@ -11,7 +11,7 @@ import LoadingScreen from "@/components/LoadingScreen";
 import NotFound from "./not-found";
 import { useAudioPlayer } from "@/hooks/useAudioPlayer";
 
-export default function Home() {
+function HomeContent() {
   const searchParams = useSearchParams();
   const guestParam = searchParams.get("to") || searchParams.get("name");
 
@@ -90,7 +90,6 @@ export default function Home() {
     setIsValidatingGuest(false);
     setRenderNotFound(true);
 
-    // Aktifkan fade-in halaman 404 & fade-out overlay hitam secara bersamaan
     requestAnimationFrame(() => {
       setFadeInNotFound(true);
       setFadeBlackOverlay(true);
@@ -145,11 +144,10 @@ export default function Home() {
     setWasPlayingBeforeModal(false);
   };
 
-  // TAMPILKAN 404 SECARA HALUS TANPA MEMUAT SCENE 3D
+  // RENDER HALAMAN 404
   if (renderNotFound) {
     return (
       <div style={{ position: "relative", minHeight: "100vh", backgroundColor: "#000000" }}>
-        {/* Layer Halaman 404 (Fade In) */}
         <div
           style={{
             opacity: fadeInNotFound ? 1 : 0,
@@ -161,7 +159,6 @@ export default function Home() {
           <NotFound />
         </div>
 
-        {/* Overlay Hitam Sementara saat Transisi */}
         {showBlackOverlay && (
           <div
             style={{
@@ -184,7 +181,6 @@ export default function Home() {
 
   return (
     <div style={{ minHeight: "100vh", position: "relative" }}>
-      {/* OVERLAY HITAM DENGAN EFEK FADE OUT */}
       {showBlackOverlay && (
         <div
           style={{
@@ -217,7 +213,6 @@ export default function Home() {
           setIsInteracting={setIsInteracting}
         />
 
-        {/* Footer Mengambang */}
         <div
           style={{
             position: "fixed",
@@ -275,5 +270,14 @@ export default function Home() {
 
       {isLoading && <LoadingScreen isFadingOut={isFadingOut} />}
     </div>
+  );
+}
+
+// BUNGKUS DENGAN SUSPENSE UNTUK MENGHINDARI BUILD ERROR NEXT.JS
+export default function Home() {
+  return (
+    <Suspense fallback={<div style={{ width: "100vw", height: "100vh", backgroundColor: "#000000" }} />}>
+      <HomeContent />
+    </Suspense>
   );
 }
