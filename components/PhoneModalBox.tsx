@@ -5,6 +5,7 @@ import React, { useState, useRef, useEffect } from "react";
 interface PhoneModalBoxProps {
   isOpen: boolean;
   onClose: () => void;
+  guestName?: string | null;
 }
 
 // ==========================================
@@ -17,6 +18,7 @@ interface MessageData {
   jumlah_orang: number;
   audio_url: string;
   created_at: string;
+  nama_tamu?: string;
 }
 
 // ==========================================
@@ -107,6 +109,13 @@ function MessageList({ refreshTrigger }: { refreshTrigger: number }) {
               </span>
             </div>
 
+            {/* Nama Pengirim jika ada */}
+            {item.nama_tamu && (
+              <div style={{ fontSize: "0.85rem", fontWeight: "bold", color: "#4a3b32", fontFamily: "sans-serif" }}>
+                Dari: {item.nama_tamu}
+              </div>
+            )}
+
             {/* Konten Pesan */}
             <p style={{
               fontFamily: "sans-serif",
@@ -141,7 +150,7 @@ function MessageList({ refreshTrigger }: { refreshTrigger: number }) {
 // ==========================================
 // KOMPONEN UTAMA: PHONE MODAL BOX
 // ==========================================
-export default function PhoneModalBox({ isOpen, onClose }: PhoneModalBoxProps) {
+export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModalBoxProps) {
   if (!isOpen) return null;
 
   // State Form
@@ -247,6 +256,9 @@ export default function PhoneModalBox({ isOpen, onClose }: PhoneModalBoxProps) {
     formData.append("pesan", pesan);
     formData.append("kehadiran", kehadiran);
     formData.append("jumlah_orang", jumlahOrang.toString());
+    if (guestName) {
+      formData.append("nama_tamu", guestName);
+    }
     
     if (audioBlob) {
       const fileVN = new File([audioBlob], "voicenote.wav", { type: "audio/wav" });
@@ -262,7 +274,7 @@ export default function PhoneModalBox({ isOpen, onClose }: PhoneModalBoxProps) {
       const result = await response.json();
 
       if (result.success) {
-        alert("Pesan dan Voice Note kamu berhasil dikirim ke Supabase! 🎉");
+        alert("Pesan dan Voice Note kamu berhasil dikirim! 🎉");
         
         // Reset inputan form
         setPesan("");
@@ -339,6 +351,12 @@ export default function PhoneModalBox({ isOpen, onClose }: PhoneModalBoxProps) {
         }}>
           Kirim Pesan
         </h1>
+
+        {guestName && (
+          <p style={{ margin: "4px 0 0 0", fontSize: "0.9rem", color: "#7a695e", fontFamily: "sans-serif" }}>
+            Dari: <strong>{guestName}</strong>
+          </p>
+        )}
         
         <div style={{ 
           width: "100%", 
