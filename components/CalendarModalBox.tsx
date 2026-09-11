@@ -10,9 +10,9 @@ interface CalendarModalBoxProps {
 export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxProps) {
   if (!isOpen) return null;
 
-  // Data Tanggal (4 Hari)
+  // Data Tanggal (4 Hari) — Tanggal 15 & 18 di-highlight (dilingkari)
   const calendarData = [
-    { dayName: "Kamis", date: 15, isHighlighted: false },
+    { dayName: "Kamis", date: 15, isHighlighted: true },
     { dayName: "Jumat", date: 16, isHighlighted: false },
     { dayName: "Sabtu", date: 17, isHighlighted: false },
     { dayName: "Minggu", date: 18, isHighlighted: true },

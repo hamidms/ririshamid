@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useRef } from "react";
+import React from "react";
 import { useGLTF } from "@react-three/drei";
 import * as THREE from "three";
 
@@ -28,16 +28,22 @@ export default function CalendarModel({ onSelect }: ModelProps) {
       {/* Model utama Kalender */}
       <primitive object={scene} scale={16} />
 
-      {/* Lingkaran Merah untuk Tanggal 15 */}
+      {/* 1. LINGKARAN MERAH TANGGAL 15 (Sumbu X geser ke kiri) */}
       <mesh
-        // Sesuaikan koordinat position [X, Y, Z] dengan posisi angka 15 di model 3D kamu
-        position={[0, 0.2, 0.01]} 
-        // Sesuaikan rotation [X, Y, Z] agar sejajar dengan bidang kemiringan kalender
+        position={[-0.45, 0.2, 0.01]} // Ubah angka -0.45 jika perlu geser horizontal ke 15
         rotation={[0, 0, 0]} 
       >
-        {/* RingGeometry(innerRadius, outerRadius, thetaSegments) */}
         <ringGeometry args={[0.08, 0.1, 32]} />
-        <meshBasicMaterial color="#ff0000" side={THREE.DoubleSide} />
+        <meshBasicMaterial color="#8b0000" side={THREE.DoubleSide} />
+      </mesh>
+
+      {/* 2. LINGKARAN MERAH TANGGAL 18 (Sumbu X geser ke kanan) */}
+      <mesh
+        position={[0.45, 0.2, 0.01]} // Ubah angka 0.45 jika perlu geser horizontal ke 18
+        rotation={[0, 0, 0]} 
+      >
+        <ringGeometry args={[0.08, 0.1, 32]} />
+        <meshBasicMaterial color="#8b0000" side={THREE.DoubleSide} />
       </mesh>
     </group>
   );
