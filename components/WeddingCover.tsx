@@ -132,7 +132,7 @@ function CoverContent({ onOpen, guestName: guestNameProp }: WeddingCoverProps) {
             marginBottom: "40px",
           }}
         >
-          23.06.2025
+          18.10.2026
         </p>
 
         {/* Informasi Tamu */}
@@ -149,12 +149,12 @@ function CoverContent({ onOpen, guestName: guestNameProp }: WeddingCoverProps) {
 
           <h2
             style={{
-              fontSize: "1.25rem",
+              fontSize: "1.2rem",
               fontWeight: "bold",
               color: "#543d2b",
-              margin: "4px 0",
+              margin: "6px 0",
               letterSpacing: "1px",
-              textTransform: "uppercase",
+              // textTransform: "uppercase",
             }}
           >
             {guestName}
@@ -177,7 +177,7 @@ function CoverContent({ onOpen, guestName: guestNameProp }: WeddingCoverProps) {
       {/* TOMBOL BUKA UNDANGAN (BOTTOM) */}
       <div
         style={{
-          paddingBottom: "50px",
+          paddingBottom: "100px",
           zIndex: 2,
         }}
       >
