@@ -8,8 +8,6 @@ interface WeddingCoverProps {
 }
 
 function CoverContent({ onOpen, guestName: guestNameProp }: WeddingCoverProps) {
-  // Hanya gunakan nama dari props (yang sudah divalidasi Supabase).
-  // Jika null/empty, gunakan default "Tamu Undangan" tanpa membaca query URL secara langsung.
   const guestName = guestNameProp || "Tamu Undangan";
 
   return (
@@ -21,147 +19,190 @@ function CoverContent({ onOpen, guestName: guestNameProp }: WeddingCoverProps) {
         width: "100vw",
         height: "100vh",
         zIndex: 99999,
+        backgroundColor: "#f8f6f0",
+        color: "#4a3e35",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
         alignItems: "center",
         boxSizing: "border-box",
-        padding: "50px 24px 30px 24px",
-        color: "#ffffff",
-        textAlign: "center",
         overflow: "hidden",
+        fontFamily: "'Georgia', 'Times New Roman', serif",
       }}
     >
-      {/* BACKGROUND IMAGE WITH BLUR & OVERLAY */}
+      {/* BACKGROUND ORNAMEN FLORAL (SVG) */}
+      {/* Ornamen Kanan Atas */}
       <div
         style={{
           position: "absolute",
-          top: 0,
-          left: 0,
-          width: "100%",
-          height: "100%",
-          backgroundImage:
-            "linear-gradient(to bottom, rgba(0, 0, 0, 0.55), rgba(0, 0, 0, 0.75)), url('/gallery/couple/couple.jpg')",
-          backgroundSize: "cover",
-          backgroundPosition: "center",
-          filter: "blur(3px)",
-          transform: "scale(1.05)",
-          zIndex: -1,
-        }}
-      />
-
-      {/* 1. BAGIAN ATAS: JUDUL ACARA */}
-      <div style={{ marginTop: "20px" }}>
-        <p
-          style={{
-            fontFamily: "'Georgia', serif",
-            fontSize: "0.9rem",
-            letterSpacing: "4px",
-            textTransform: "uppercase",
-            opacity: 0.9,
-            marginBottom: "15px",
-            textShadow: "1px 1px 4px rgba(0,0,0,0.5)",
-          }}
-        >
-          The Wedding of
-        </p>
-        <h1
-          style={{
-            fontFamily: "'Georgia', serif",
-            fontSize: "2.8rem",
-            fontWeight: "normal",
-            margin: 0,
-            letterSpacing: "2px",
-            textShadow: "2px 2px 8px rgba(0,0,0,0.6)",
-          }}
-        >
-          Riris & Hamid
-        </h1>
-      </div>
-
-      {/* 2. BAGIAN TENGAH DIBUAT KOSONG */}
-      <div style={{ flex: 1 }} />
-
-      {/* 3. BAGIAN BAWAH: DATA TAMU DAN ACTION BUTTON */}
-      <div
-        style={{
-          width: "100%",
-          maxWidth: "360px",
-          boxSizing: "border-box",
-          marginBottom: "20px",
+          top: "-20px",
+          right: "-30px",
+          width: "220px",
+          height: "220px",
+          pointerEvents: "none",
+          zIndex: 0,
+          opacity: 0.85,
         }}
       >
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="140" cy="60" r="45" fill="#E8B4B8" opacity="0.6" />
+          <circle cx="100" cy="40" r="35" fill="#F4D1D2" opacity="0.7" />
+          <path d="M120 80 Q160 30 180 90" stroke="#C5A059" strokeWidth="1.5" fill="none" />
+          <path d="M90 60 Q130 10 150 70" stroke="#C5A059" strokeWidth="1" fill="none" />
+          <circle cx="150" cy="80" r="8" fill="#D8959B" />
+        </svg>
+      </div>
+
+      {/* Ornamen Kiri Bawah */}
+      <div
+        style={{
+          position: "absolute",
+          bottom: "-20px",
+          left: "-30px",
+          width: "240px",
+          height: "240px",
+          pointerEvents: "none",
+          zIndex: 0,
+          opacity: 0.85,
+        }}
+      >
+        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="60" cy="140" r="50" fill="#E8B4B8" opacity="0.6" />
+          <circle cx="40" cy="100" r="40" fill="#F4D1D2" opacity="0.7" />
+          <path d="M80 120 Q30 160 90 180" stroke="#C5A059" strokeWidth="1.5" fill="none" />
+          <circle cx="50" cy="120" r="10" fill="#D8959B" />
+        </svg>
+      </div>
+
+      {/* SPACE ATAS UNTUK BALANCE LAYOUT */}
+      <div style={{ height: "40px" }} />
+
+      {/* AREA KONTEN UTAMA */}
+      <div
+        style={{
+          flex: 1,
+          display: "flex",
+          flexDirection: "column",
+          justifyContent: "center",
+          alignItems: "center",
+          textAlign: "center",
+          padding: "0 24px",
+          zIndex: 2,
+        }}
+      >
+        {/* Subtitle */}
         <p
           style={{
-            fontSize: "0.85rem",
-            opacity: 0.85,
-            margin: "0 0 12px 0",
-            letterSpacing: "0.5px",
+            fontSize: "0.75rem",
+            letterSpacing: "4px",
+            textTransform: "uppercase",
+            color: "#8c735c",
+            marginBottom: "16px",
           }}
         >
-          Kepada Bapak/Ibu/Saudara/i
+          THE WEDDING OF
         </p>
 
-        <h2
+        {/* Nama Pengantin */}
+        <h1
           style={{
-            fontSize: "1.5rem",
-            fontWeight: "600",
-            color: "#f1c40f",
-            margin: "0 0 16px 0",
-            textShadow: "1px 1px 4px rgba(0,0,0,0.6)",
+            fontSize: "3.2rem",
+            fontWeight: "normal",
+            lineHeight: "1.1",
+            color: "#6b4f35",
+            margin: 0,
+            letterSpacing: "2px",
+            textTransform: "uppercase",
           }}
         >
-          {guestName}
-        </h2>
+          RIRIS
+          <br />
+          <span style={{ fontSize: "2rem", fontStyle: "italic", textTransform: "none" }}>&amp;</span>
+          <br />
+          HAMID
+        </h1>
 
+        {/* Tanggal Pernikahan */}
         <p
           style={{
-            fontSize: "0.82rem",
-            lineHeight: "1.6",
-            opacity: 0.9,
-            margin: "0 0 30px 0",
-            textShadow: "1px 1px 3px rgba(0,0,0,0.5)",
+            fontSize: "0.9rem",
+            letterSpacing: "3px",
+            color: "#8c735c",
+            marginTop: "16px",
+            marginBottom: "40px",
           }}
         >
-          Tanpa mengurangi rasa hormat, kami mengundang Anda untuk hadir di
-          acara pernikahan kami.
+          23.06.2025
         </p>
 
+        {/* Informasi Tamu */}
+        <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "6px" }}>
+          <p
+            style={{
+              fontSize: "0.8rem",
+              color: "#7a6655",
+              margin: 0,
+            }}
+          >
+            Kepada Yth. Bapak/Ibu/Saudara/i
+          </p>
+
+          <h2
+            style={{
+              fontSize: "1.25rem",
+              fontWeight: "bold",
+              color: "#543d2b",
+              margin: "4px 0",
+              letterSpacing: "1px",
+              textTransform: "uppercase",
+            }}
+          >
+            {guestName}
+          </h2>
+
+          <p
+            style={{
+              fontSize: "0.7rem",
+              color: "#968372",
+              margin: 0,
+              maxWidth: "280px",
+              lineHeight: "1.4",
+            }}
+          >
+            Mohon maaf apabila terdapat kesalahan dalam penulisan nama &amp; gelar
+          </p>
+        </div>
+      </div>
+
+      {/* TOMBOL BUKA UNDANGAN (BOTTOM) */}
+      <div
+        style={{
+          paddingBottom: "50px",
+          zIndex: 2,
+        }}
+      >
         <button
           onClick={onOpen}
           style={{
             backgroundColor: "#ffffff",
-            color: "#1e272e",
-            border: "none",
-            padding: "14px 40px",
-            fontSize: "0.9rem",
-            fontWeight: "600",
+            color: "#543d2b",
+            border: "1px solid #b8a695",
+            padding: "12px 36px",
+            fontSize: "0.78rem",
+            letterSpacing: "2px",
+            textTransform: "uppercase",
             borderRadius: "30px",
             cursor: "pointer",
-            boxShadow: "0 5px 20px rgba(0,0,0,0.4)",
-            letterSpacing: "1px",
-            marginBottom: "25px",
-            transition: "transform 0.2s ease, background-color 0.2s ease",
+            boxShadow: "0 4px 15px rgba(107, 79, 53, 0.08)",
+            transition: "transform 0.2s ease",
+            fontFamily: "sans-serif",
+            fontWeight: "500",
           }}
-          onMouseDown={(e) =>
-            (e.currentTarget.style.transform = "scale(0.96)")
-          }
+          onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.96)")}
           onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
         >
-          ✉️ Buka Undangan
+          BUKA UNDANGAN
         </button>
-
-        <p
-          style={{
-            fontSize: "0.68rem",
-            opacity: 0.5,
-            fontStyle: "italic",
-            margin: 0,
-            letterSpacing: "0.2px",
-          }}
-        >
-          Mohon maaf apabila ada kesalahan penulisan nama/gelar
-        </p>
       </div>
     </div>
   );
