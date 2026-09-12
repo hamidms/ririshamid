@@ -14,6 +14,7 @@ interface MessageData {
 export default function MessageList() {
   const [messages, setMessages] = useState<MessageData[]>([]);
   const [loading, setLoading] = useState(true);
+  const [isVisible, setIsVisible] = useState(false);
 
   // Fungsi untuk mengambil data dari API internal Next.js
   const fetchMessages = async () => {
@@ -38,6 +39,14 @@ export default function MessageList() {
     return () => clearInterval(interval);
   }, []);
 
+  // Memicu animasi fade-in setelah loading selesai
+  useEffect(() => {
+    if (!loading) {
+      const timer = setTimeout(() => setIsVisible(true), 50);
+      return () => clearTimeout(timer);
+    }
+  }, [loading]);
+
   if (loading) {
     return <div className="text-center py-4 text-gray-500">Memuat ucapan...</div>;
   }
@@ -47,15 +56,22 @@ export default function MessageList() {
   }
 
   return (
-    <div className="w-full max-w-4xl mx-auto px-4 py-6">
+    <div 
+      className={`w-full max-w-4xl mx-auto px-4 py-6 transition-all duration-500 ease-out ${
+        isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+      }`}
+    >
       <h3 className="text-xl font-semibold mb-4 text-gray-700 text-center">Ucapan & Voice Note Tamu</h3>
       
       {/* Container Grid */}
       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-        {messages.map((item) => (
+        {messages.map((item, index) => (
           <div 
             key={item.id} 
-            className="bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between"
+            style={{ transitionDelay: `${index * 50}ms` }}
+            className={`bg-white p-4 rounded-xl shadow-sm border border-gray-100 flex flex-col justify-between transition-all duration-500 ease-out ${
+              isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
+            }`}
           >
             {/* Bagian Atas: Isi Teks Pesan */}
             <div className="mb-4">

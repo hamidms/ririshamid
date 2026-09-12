@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useState, useEffect } from "react";
 
 interface AudioModalBoxProps {
   isOpen: boolean;
@@ -17,11 +17,43 @@ export default function AudioModalBox({
   togglePlay, 
   progress 
 }: AudioModalBoxProps) {
+  const [shouldRender, setShouldRender] = useState(false);
+  const [animate, setAnimate] = useState(false);
 
-  if (!isOpen) return null;
+  // Menangani animasi Fade-in & Fade-out saat isOpen berubah
+  useEffect(() => {
+    if (isOpen) {
+      setShouldRender(true);
+      const timer = setTimeout(() => setAnimate(true), 10);
+      return () => clearTimeout(timer);
+    } else {
+      setAnimate(false);
+      const timer = setTimeout(() => setShouldRender(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
+  if (!shouldRender) return null;
 
   return (
     <>
+      {/* OVERLAY / BACKDROP DENGAN FADE */}
+      <div
+        onClick={onClose}
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          backgroundColor: "rgba(0, 0, 0, 0.4)",
+          zIndex: 9998,
+          opacity: animate ? 1 : 0,
+          transition: "opacity 300ms cubic-bezier(0.4, 0, 0.2, 1)",
+          backdropFilter: "blur(4px)"
+        }}
+      />
+
       {/* TOMBOL SILANG FIXED */}
       <button 
         onClick={onClose} 
@@ -42,13 +74,15 @@ export default function AudioModalBox({
           alignItems: "center",
           justifyContent: "center",
           zIndex: 10001,
-          boxShadow: "0 3px 10px rgba(0,0,0,0.3)"
+          boxShadow: "0 3px 10px rgba(0,0,0,0.3)",
+          opacity: animate ? 1 : 0,
+          transition: "opacity 300ms cubic-bezier(0.4, 0, 0.2, 1)"
         }}
       >
         ✕
       </button>
 
-      {/* WINDOW MODAL UTAMA */}
+      {/* WINDOW MODAL UTAMA DENGAN FADE & SCALE */}
       <div style={{
         position: "fixed", 
         top: "5%",
@@ -64,6 +98,9 @@ export default function AudioModalBox({
         display: "block",
         overflowX: "hidden",
         overflowY: "auto",
+        opacity: animate ? 1 : 0,
+        transform: animate ? "scale(1) translateY(0)" : "scale(0.95) translateY(20px)",
+        transition: "opacity 300ms cubic-bezier(0.4, 0, 0.2, 1), transform 300ms cubic-bezier(0.4, 0, 0.2, 1)"
       }}>
 
         {/* KONTEN TEXT: SURAT AR-RUM AYAT 21 */}

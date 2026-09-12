@@ -160,9 +160,13 @@ function MessageList({ refreshTrigger }: { refreshTrigger: number }) {
 }
 
 // ==========================================
-// KOMPONEN UTAMA: PHONE MODAL BOX
+// KOMPONEN UTAMA: PHONE MODAL BOX DENGAN ANIMASI FADE
 // ==========================================
 export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModalBoxProps) {
+  // State Animasi Fade & Mounting
+  const [shouldRender, setShouldRender] = useState(false);
+  const [animate, setAnimate] = useState(false);
+
   // State Form
   const [pesan, setPesan] = useState("");
   const [kehadiran, setKehadiran] = useState("datang-sendiri");
@@ -181,7 +185,20 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
   const audioChunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Cleanup Object URL saat unmount/modal ditutup untuk mencegah memory leak
+  // Menangani animasi Fade-in & Fade-out saat isOpen berubah
+  useEffect(() => {
+    if (isOpen) {
+      setShouldRender(true);
+      const timer = setTimeout(() => setAnimate(true), 10);
+      return () => clearTimeout(timer);
+    } else {
+      setAnimate(false);
+      const timer = setTimeout(() => setShouldRender(false), 300);
+      return () => clearTimeout(timer);
+    }
+  }, [isOpen]);
+
+  // Cleanup Object URL saat unmount/modal ditutup
   useEffect(() => {
     return () => {
       if (audioUrl) URL.revokeObjectURL(audioUrl);
@@ -202,7 +219,7 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
     };
   }, [isRecording]);
 
-  if (!isOpen) return null;
+  if (!shouldRender) return null;
 
   // Deteksi MIME type audio yang didukung oleh browser
   const getSupportedMimeType = () => {
@@ -331,297 +348,323 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
   };
 
   return (
-    <div
-      style={{
-        position: "fixed",
-        top: "5%",
-        left: "5%",
-        width: "90vw",
-        height: "88vh",
-        backgroundColor: "#fbf9f5",
-        borderRadius: "24px",
-        boxShadow: "0 15px 40px rgba(0,0,0,0.3)",
-        zIndex: 999,
-        boxSizing: "border-box",
-        display: "flex",
-        flexDirection: "column",
-        backgroundImage: "linear-gradient(to right, rgba(74, 59, 50, 0.04) 1px, transparent 1px)",
-        backgroundSize: "20px 100%",
-        overflow: "hidden",
-      }}
-    >
-      {/* HEADER AREA */}
+    <>
+      {/* OVERLAY / BACKDROP DENGAN FADE IN/OUT */}
+      <div
+        onClick={onClose}
+        style={{
+          position: "fixed",
+          top: 0,
+          left: 0,
+          width: "100vw",
+          height: "100vh",
+          backgroundColor: "rgba(0, 0, 0, 0.4)",
+          zIndex: 9998,
+          opacity: animate ? 1 : 0,
+          transition: "opacity 300ms cubic-bezier(0.4, 0, 0.2, 1)",
+          backdropFilter: "blur(4px)",
+        }}
+      />
+
+      {/* TOMBOL SILANG FIXED DENGAN FADE IN/OUT */}
+      <button
+        onClick={onClose}
+        style={{
+          position: "fixed",
+          top: "calc(5% + 15px)",
+          right: "calc(5% + 15px)",
+          width: "35px",
+          height: "35px",
+          backgroundColor: "#d63031",
+          color: "white",
+          border: "none",
+          borderRadius: "50%",
+          fontSize: "16px",
+          fontWeight: "bold",
+          cursor: "pointer",
+          display: "flex",
+          alignItems: "center",
+          justifyContent: "center",
+          zIndex: 10001,
+          boxShadow: "0 3px 10px rgba(0,0,0,0.3)",
+          opacity: animate ? 1 : 0,
+          transition: "opacity 300ms cubic-bezier(0.4, 0, 0.2, 1)",
+        }}
+      >
+        ✕
+      </button>
+
+      {/* MODAL UTAMA DENGAN FADE IN/OUT & SCALE ANIMATION */}
       <div
         style={{
-          padding: "25px 20px 15px 20px",
-          position: "relative",
-          borderBottom: "1px dashed rgba(74, 59, 50, 0.1)",
-        }}
-      >
-        <button
-          onClick={onClose}
-          style={{
-            position: "absolute",
-            top: "20px",
-            right: "20px",
-            width: "30px",
-            height: "30px",
-            backgroundColor: "#d63031",
-            color: "white",
-            border: "none",
-            borderRadius: "50%",
-            fontSize: "14px",
-            fontWeight: "bold",
-            cursor: "pointer",
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "center",
-            zIndex: 1000,
-            boxShadow: "0 3px 8px rgba(0,0,0,0.2)",
-          }}
-        >
-          ✕
-        </button>
-
-        <h1
-          style={{
-            fontFamily: "'Georgia', serif",
-            fontSize: "2.4rem",
-            fontStyle: "italic",
-            fontWeight: "normal",
-            color: "#4a3b32",
-            margin: 0,
-          }}
-        >
-          Kirim Pesan
-        </h1>
-
-        {guestName && (
-          <p style={{ margin: "4px 0 0 0", fontSize: "0.9rem", color: "#7a695e", fontFamily: "sans-serif" }}>
-            Dari: <strong>{guestName}</strong>
-          </p>
-        )}
-
-        <div
-          style={{
-            width: "100%",
-            height: "10px",
-            backgroundImage:
-              "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 12' width='100%25' height='12' preserveAspectRatio='none'%3E%3Cpath d='M0,6 C150,12 150,0 300,6 C450,12 450,0 600,6 C750,12 750,0 900,6 C1050,12 1050,0 1200,6' fill='none' stroke='%234a3b32' stroke-width='2'/%3E%3C/svg%3E\")",
-            backgroundRepeat: "repeat-x",
-            margin: "8px 0 0 0",
-          }}
-        />
-      </div>
-
-      {/* AREA FORM & LIST (SCROLLABLE) */}
-      <form
-        onSubmit={handleSubmit}
-        style={{
-          flex: 1,
-          overflowY: "auto",
-          padding: "20px",
+          position: "fixed",
+          top: "5%",
+          left: "5%",
+          width: "90vw",
+          height: "88vh",
+          backgroundColor: "#fbf9f5",
+          borderRadius: "24px",
+          boxShadow: "0 15px 40px rgba(0,0,0,0.3)",
+          zIndex: 10000,
+          boxSizing: "border-box",
           display: "flex",
           flexDirection: "column",
-          gap: "24px",
-          WebkitOverflowScrolling: "touch",
+          backgroundImage: "linear-gradient(to right, rgba(74, 59, 50, 0.04) 1px, transparent 1px)",
+          backgroundSize: "20px 100%",
+          overflow: "hidden",
+          opacity: animate ? 1 : 0,
+          transform: animate ? "scale(1) translateY(0)" : "scale(0.95) translateY(20px)",
+          transition: "opacity 300ms cubic-bezier(0.4, 0, 0.2, 1), transform 300ms cubic-bezier(0.4, 0, 0.2, 1)",
         }}
       >
-        {/* 1. INPUT TEXT */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-          <label style={{ fontFamily: "'Georgia', serif", fontStyle: "italic", color: "#4a3b32", fontSize: "1.1rem" }}>
-            Silakan masukkan pesan:
-          </label>
-          <textarea
-            value={pesan}
-            onChange={(e) => setPesan(e.target.value)}
-            placeholder="Tulis ucapan atau pesanmu di sini..."
-            required
-            rows={4}
+        {/* HEADER AREA */}
+        <div
+          style={{
+            padding: "25px 20px 15px 20px",
+            position: "relative",
+            borderBottom: "1px dashed rgba(74, 59, 50, 0.1)",
+          }}
+        >
+          <h1
+            style={{
+              fontFamily: "'Georgia', serif",
+              fontSize: "2.4rem",
+              fontStyle: "italic",
+              fontWeight: "normal",
+              color: "#4a3b32",
+              margin: 0,
+            }}
+          >
+            Kirim Pesan
+          </h1>
+
+          {guestName && (
+            <p style={{ margin: "4px 0 0 0", fontSize: "0.9rem", color: "#7a695e", fontFamily: "sans-serif" }}>
+              Dari: <strong>{guestName}</strong>
+            </p>
+          )}
+
+          <div
             style={{
               width: "100%",
-              padding: "12px",
-              borderRadius: "8px",
-              border: "1px solid #c9bda7",
-              backgroundColor: "#ffffff",
-              fontFamily: "sans-serif",
-              fontSize: "0.9rem",
-              color: "#3e3129",
-              boxSizing: "border-box",
-              outline: "none",
+              height: "10px",
+              backgroundImage:
+                "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 12' width='100%25' height='12' preserveAspectRatio='none'%3E%3Cpath d='M0,6 C150,12 150,0 300,6 C450,12 450,0 600,6 C750,12 750,0 900,6 C1050,12 1050,0 1200,6' fill='none' stroke='%234a3b32' stroke-width='2'/%3E%3C/svg%3E\")",
+              backgroundRepeat: "repeat-x",
+              margin: "8px 0 0 0",
             }}
           />
         </div>
 
-        {/* 2. PILIHAN KEHADIRAN */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-          <label style={{ fontFamily: "'Georgia', serif", fontStyle: "italic", color: "#4a3b32", fontSize: "1.1rem" }}>
-            Konfirmasi Kehadiran:
-          </label>
-          <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
-            {[
-              { id: "tidak-hadir", label: "Tidak bisa hadir" },
-              { id: "datang-sendiri", label: "Datang sendiri" },
-              { id: "datang-berdua", label: "Datang berdua" },
-            ].map((option) => (
-              <label
-                key={option.id}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "10px",
-                  fontSize: "0.95rem",
-                  color: "#5c4d42",
-                  fontFamily: "sans-serif",
-                  cursor: "pointer",
-                }}
-              >
-                <input
-                  type="radio"
-                  name="kehadiran"
-                  value={option.id}
-                  checked={kehadiran === option.id}
-                  onChange={(e) => setKehadiran(e.target.value)}
-                  style={{ accentColor: "#4a3b32", width: "18px", height: "18px" }}
-                />
-                {option.label}
-              </label>
-            ))}
+        {/* AREA FORM & LIST (SCROLLABLE) */}
+        <form
+          onSubmit={handleSubmit}
+          style={{
+            flex: 1,
+            overflowY: "auto",
+            padding: "20px",
+            display: "flex",
+            flexDirection: "column",
+            gap: "24px",
+            WebkitOverflowScrolling: "touch",
+          }}
+        >
+          {/* 1. INPUT TEXT */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            <label style={{ fontFamily: "'Georgia', serif", fontStyle: "italic", color: "#4a3b32", fontSize: "1.1rem" }}>
+              Silakan masukkan pesan:
+            </label>
+            <textarea
+              value={pesan}
+              onChange={(e) => setPesan(e.target.value)}
+              placeholder="Tulis ucapan atau pesanmu di sini..."
+              required
+              rows={4}
+              style={{
+                width: "100%",
+                padding: "12px",
+                borderRadius: "8px",
+                border: "1px solid #c9bda7",
+                backgroundColor: "#ffffff",
+                fontFamily: "sans-serif",
+                fontSize: "0.9rem",
+                color: "#3e3129",
+                boxSizing: "border-box",
+                outline: "none",
+              }}
+            />
           </div>
-        </div>
 
-        {/* 3. MODUL VOICE NOTE */}
-        <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-          <label style={{ fontFamily: "'Georgia', serif", fontStyle: "italic", color: "#4a3b32", fontSize: "1.1rem" }}>
-            Pesan Suara / Voice Note (Opsional):
-          </label>
-
-          <div
-            style={{
-              border: "1px dashed #c9bda7",
-              borderRadius: "12px",
-              padding: "20px",
-              backgroundColor: "rgba(255, 255, 255, 0.6)",
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              gap: "12px",
-              boxSizing: "border-box",
-            }}
-          >
-            {!isRecording && !audioUrl && (
-              <button
-                type="button"
-                onClick={startRecording}
-                style={{
-                  display: "flex",
-                  alignItems: "center",
-                  gap: "8px",
-                  padding: "10px 18px",
-                  backgroundColor: "#1e56e3",
-                  color: "white",
-                  border: "none",
-                  borderRadius: "20px",
-                  cursor: "pointer",
-                  fontWeight: "bold",
-                  fontFamily: "sans-serif",
-                  fontSize: "0.85rem",
-                }}
-              >
-                🎙️ Mulai Rekam VN
-              </button>
-            )}
-
-            {isRecording && (
-              <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
-                <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
-                  <span
-                    style={{
-                      width: "100%",
-                      height: "10px",
-                      maxWidth: "10px",
-                      backgroundColor: "#d63031",
-                      borderRadius: "50%",
-                      animation: "pulse 1s infinite alternate",
-                    }}
+          {/* 2. PILIHAN KEHADIRAN */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
+            <label style={{ fontFamily: "'Georgia', serif", fontStyle: "italic", color: "#4a3b32", fontSize: "1.1rem" }}>
+              Konfirmasi Kehadiran:
+            </label>
+            <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
+              {[
+                { id: "tidak-hadir", label: "Tidak bisa hadir" },
+                { id: "datang-sendiri", label: "Datang sendiri" },
+                { id: "datang-berdua", label: "Datang berdua" },
+              ].map((option) => (
+                <label
+                  key={option.id}
+                  style={{
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "10px",
+                    fontSize: "0.95rem",
+                    color: "#5c4d42",
+                    fontFamily: "sans-serif",
+                    cursor: "pointer",
+                  }}
+                >
+                  <input
+                    type="radio"
+                    name="kehadiran"
+                    value={option.id}
+                    checked={kehadiran === option.id}
+                    onChange={(e) => setKehadiran(e.target.value)}
+                    style={{ accentColor: "#4a3b32", width: "18px", height: "18px" }}
                   />
-                  <span style={{ fontFamily: "monospace", fontSize: "1.2rem", fontWeight: "bold", color: "#4a3b32" }}>
-                    {formatTime(recordingTime)}
-                  </span>
-                </div>
+                  {option.label}
+                </label>
+              ))}
+            </div>
+          </div>
+
+          {/* 3. MODUL VOICE NOTE */}
+          <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
+            <label style={{ fontFamily: "'Georgia', serif", fontStyle: "italic", color: "#4a3b32", fontSize: "1.1rem" }}>
+              Pesan Suara / Voice Note (Opsional):
+            </label>
+
+            <div
+              style={{
+                border: "1px dashed #c9bda7",
+                borderRadius: "12px",
+                padding: "20px",
+                backgroundColor: "rgba(255, 255, 255, 0.6)",
+                display: "flex",
+                flexDirection: "column",
+                alignItems: "center",
+                gap: "12px",
+                boxSizing: "border-box",
+              }}
+            >
+              {!isRecording && !audioUrl && (
                 <button
                   type="button"
-                  onClick={stopRecording}
+                  onClick={startRecording}
                   style={{
-                    padding: "8px 16px",
-                    backgroundColor: "#d63031",
+                    display: "flex",
+                    alignItems: "center",
+                    gap: "8px",
+                    padding: "10px 18px",
+                    backgroundColor: "#1e56e3",
                     color: "white",
                     border: "none",
                     borderRadius: "20px",
                     cursor: "pointer",
-                    fontSize: "0.85rem",
                     fontWeight: "bold",
+                    fontFamily: "sans-serif",
+                    fontSize: "0.85rem",
                   }}
                 >
-                  ⏹️ Selesai
+                  🎙️ Mulai Rekam VN
                 </button>
-              </div>
-            )}
+              )}
 
-            {audioUrl && !isRecording && (
-              <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
-                <audio src={audioUrl} controls preload="metadata" style={{ width: "100%", maxWidth: "260px" }} />
-                <button
-                  type="button"
-                  onClick={deleteRecording}
-                  style={{
-                    padding: "4px 12px",
-                    backgroundColor: "transparent",
-                    color: "#d63031",
-                    border: "1px solid #d63031",
-                    borderRadius: "12px",
-                    cursor: "pointer",
-                    fontSize: "0.75rem",
-                    fontWeight: "500",
-                  }}
-                >
-                  🗑️ Hapus & Rekam Ulang
-                </button>
-              </div>
-            )}
+              {isRecording && (
+                <div style={{ display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
+                  <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+                    <span
+                      style={{
+                        width: "100%",
+                        height: "10px",
+                        maxWidth: "10px",
+                        backgroundColor: "#d63031",
+                        borderRadius: "50%",
+                        animation: "pulse 1s infinite alternate",
+                      }}
+                    />
+                    <span style={{ fontFamily: "monospace", fontSize: "1.2rem", fontWeight: "bold", color: "#4a3b32" }}>
+                      {formatTime(recordingTime)}
+                    </span>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={stopRecording}
+                    style={{
+                      padding: "8px 16px",
+                      backgroundColor: "#d63031",
+                      color: "white",
+                      border: "none",
+                      borderRadius: "20px",
+                      cursor: "pointer",
+                      fontSize: "0.85rem",
+                      fontWeight: "bold",
+                    }}
+                  >
+                    ⏹️ Selesai
+                  </button>
+                </div>
+              )}
+
+              {audioUrl && !isRecording && (
+                <div style={{ width: "100%", display: "flex", flexDirection: "column", alignItems: "center", gap: "10px" }}>
+                  <audio src={audioUrl} controls preload="metadata" style={{ width: "100%", maxWidth: "260px" }} />
+                  <button
+                    type="button"
+                    onClick={deleteRecording}
+                    style={{
+                      padding: "4px 12px",
+                      backgroundColor: "transparent",
+                      color: "#d63031",
+                      border: "1px solid #d63031",
+                      borderRadius: "12px",
+                      cursor: "pointer",
+                      fontSize: "0.75rem",
+                      fontWeight: "500",
+                    }}
+                  >
+                    🗑️ Hapus & Rekam Ulang
+                  </button>
+                </div>
+              )}
+            </div>
           </div>
-        </div>
 
-        {/* 4. TOMBOL SUBMIT */}
-        <button
-          type="submit"
-          style={{
-            marginTop: "10px",
-            padding: "14px",
-            backgroundColor: "#4a3b32",
-            color: "#fbf9f5",
-            border: "none",
-            borderRadius: "8px",
-            fontFamily: "'Georgia', serif",
-            fontSize: "1.1rem",
-            fontStyle: "italic",
-            cursor: "pointer",
-            boxShadow: "0 4px 12px rgba(74, 59, 50, 0.2)",
-          }}
-        >
-          Kirim Pesan ➔
-        </button>
+          {/* 4. TOMBOL SUBMIT */}
+          <button
+            type="submit"
+            style={{
+              marginTop: "10px",
+              padding: "14px",
+              backgroundColor: "#4a3b32",
+              color: "#fbf9f5",
+              border: "none",
+              borderRadius: "8px",
+              fontFamily: "'Georgia', serif",
+              fontSize: "1.1rem",
+              fontStyle: "italic",
+              cursor: "pointer",
+              boxShadow: "0 4px 12px rgba(74, 59, 50, 0.2)",
+            }}
+          >
+            Kirim Pesan ➔
+          </button>
 
-        {/* 5. DAFTAR PESAN */}
-        <MessageList refreshTrigger={refreshTrigger} />
-      </form>
+          {/* 5. DAFTAR PESAN */}
+          <MessageList refreshTrigger={refreshTrigger} />
+        </form>
 
-      <style>{`
-        @keyframes pulse {
-          from { opacity: 1; }
-          to { opacity: 0.3; }
-        }
-      `}</style>
-    </div>
+        <style>{`
+          @keyframes pulse {
+            from { opacity: 1; }
+            to { opacity: 0.3; }
+          }
+        `}</style>
+      </div>
+    </>
   );
 }
