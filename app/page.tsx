@@ -205,7 +205,17 @@ function HomeContent() {
         onEnded={() => setIsPlaying(false)}
       />
 
-      <main style={{ width: "100vw", height: "100vh", backgroundColor: "#ee8cde", position: "relative" }}>
+    <main
+    style={{
+        width: "100vw",
+        height: "100vh",
+        backgroundImage: "url('/gallery/assets/background.jpeg')",
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+        backgroundRepeat: "no-repeat",
+        position: "relative",
+    }}
+    >
         <Scene3D
           setActiveModel={setActiveModel}
           handleOpenPhoneModal={handleOpenPhoneModal}

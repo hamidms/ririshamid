@@ -19,8 +19,7 @@ function CoverContent({ onOpen, guestName: guestNameProp }: WeddingCoverProps) {
         width: "100vw",
         height: "100vh",
         zIndex: 99999,
-        backgroundColor: "#f8f6f0",
-        color: "#4a3e35",
+        color: "#ffffff",
         display: "flex",
         flexDirection: "column",
         justifyContent: "space-between",
@@ -30,52 +29,30 @@ function CoverContent({ onOpen, guestName: guestNameProp }: WeddingCoverProps) {
         fontFamily: "'Georgia', 'Times New Roman', serif",
       }}
     >
-      {/* BACKGROUND ORNAMEN FLORAL (SVG) */}
-      {/* Ornamen Kanan Atas */}
+      {/* BACKGROUND IMAGE DENGAN EFEK BLUR & DARK OVERLAY */}
       <div
         style={{
           position: "absolute",
-          top: "-20px",
-          right: "-30px",
-          width: "220px",
-          height: "220px",
-          pointerEvents: "none",
+          top: 0,
+          left: 0,
+          width: "100%",
+          height: "100%",
+          backgroundImage: "linear-gradient(to bottom, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.75)), url('/gallery/couple/cover.jpeg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          filter: "blur(2px)", // Menambahkan efek blur pada background
+          transform: "scale(1.08)", // Scale sedikit agar tepi layar tertutup rapat dari vignetting blur
           zIndex: 0,
-          opacity: 0.85,
         }}
-      >
-        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="140" cy="60" r="45" fill="#E8B4B8" opacity="0.6" />
-          <circle cx="100" cy="40" r="35" fill="#F4D1D2" opacity="0.7" />
-          <path d="M120 80 Q160 30 180 90" stroke="#C5A059" strokeWidth="1.5" fill="none" />
-          <path d="M90 60 Q130 10 150 70" stroke="#C5A059" strokeWidth="1" fill="none" />
-          <circle cx="150" cy="80" r="8" fill="#D8959B" />
-        </svg>
-      </div>
+      />
 
-      {/* Ornamen Kiri Bawah */}
-      <div
-        style={{
-          position: "absolute",
-          bottom: "-20px",
-          left: "-30px",
-          width: "240px",
-          height: "240px",
-          pointerEvents: "none",
-          zIndex: 0,
-          opacity: 0.85,
-        }}
-      >
-        <svg viewBox="0 0 200 200" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <circle cx="60" cy="140" r="50" fill="#E8B4B8" opacity="0.6" />
-          <circle cx="40" cy="100" r="40" fill="#F4D1D2" opacity="0.7" />
-          <path d="M80 120 Q30 160 90 180" stroke="#C5A059" strokeWidth="1.5" fill="none" />
-          <circle cx="50" cy="120" r="10" fill="#D8959B" />
-        </svg>
-      </div>
+      {/* IMPORT GOOGLE FONT DANCING SCRIPT */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@400..700&display=swap');
+      `}</style>
 
       {/* SPACE ATAS UNTUK BALANCE LAYOUT */}
-      <div style={{ height: "40px" }} />
+      <div style={{ height: "40px", zIndex: 2 }} />
 
       {/* AREA KONTEN UTAMA */}
       <div
@@ -96,30 +73,31 @@ function CoverContent({ onOpen, guestName: guestNameProp }: WeddingCoverProps) {
             fontSize: "0.75rem",
             letterSpacing: "4px",
             textTransform: "uppercase",
-            color: "#8c735c",
+            color: "rgba(255, 255, 255, 0.9)",
             marginBottom: "16px",
+            textShadow: "0 2px 4px rgba(0,0,0,0.6)",
           }}
         >
           THE WEDDING OF
         </p>
 
-        {/* Nama Pengantin */}
+        {/* Nama Pengantin (Dancing Script Warna Putih) */}
         <h1
           style={{
-            fontSize: "3.2rem",
-            fontWeight: "normal",
-            lineHeight: "1.1",
-            color: "#6b4f35",
+            fontFamily: "'Dancing Script', cursive",
+            fontSize: "4.2rem",
+            fontWeight: "600",
+            lineHeight: "1.2",
+            color: "#ffffff",
             margin: 0,
-            letterSpacing: "2px",
-            textTransform: "uppercase",
+            textShadow: "0 3px 12px rgba(0,0,0,0.7)",
           }}
         >
-          RIRIS
+          Riris
           <br />
-          <span style={{ fontSize: "2rem", fontStyle: "italic", textTransform: "none" }}>&amp;</span>
+          <span style={{ fontSize: "2.5rem", fontStyle: "normal" }}>&amp;</span>
           <br />
-          HAMID
+          Hamid
         </h1>
 
         {/* Tanggal Pernikahan */}
@@ -127,9 +105,10 @@ function CoverContent({ onOpen, guestName: guestNameProp }: WeddingCoverProps) {
           style={{
             fontSize: "0.9rem",
             letterSpacing: "3px",
-            color: "#8c735c",
+            color: "rgba(255, 255, 255, 0.95)",
             marginTop: "16px",
             marginBottom: "40px",
+            textShadow: "0 2px 4px rgba(0,0,0,0.6)",
           }}
         >
           18.10.2026
@@ -140,8 +119,9 @@ function CoverContent({ onOpen, guestName: guestNameProp }: WeddingCoverProps) {
           <p
             style={{
               fontSize: "0.8rem",
-              color: "#7a6655",
+              color: "rgba(255, 255, 255, 0.9)",
               margin: 0,
+              textShadow: "0 1px 3px rgba(0,0,0,0.6)",
             }}
           >
             Kepada Yth. Bapak/Ibu/Saudara/i
@@ -149,12 +129,12 @@ function CoverContent({ onOpen, guestName: guestNameProp }: WeddingCoverProps) {
 
           <h2
             style={{
-              fontSize: "1.2rem",
+              fontSize: "1.3rem",
               fontWeight: "bold",
-              color: "#543d2b",
+              color: "#ffffff",
               margin: "6px 0",
               letterSpacing: "1px",
-              // textTransform: "uppercase",
+              textShadow: "0 2px 8px rgba(0,0,0,0.8)",
             }}
           >
             {guestName}
@@ -163,10 +143,11 @@ function CoverContent({ onOpen, guestName: guestNameProp }: WeddingCoverProps) {
           <p
             style={{
               fontSize: "0.7rem",
-              color: "#968372",
+              color: "rgba(255, 255, 255, 0.8)",
               margin: 0,
               maxWidth: "280px",
               lineHeight: "1.4",
+              textShadow: "0 1px 3px rgba(0,0,0,0.6)",
             }}
           >
             Mohon maaf apabila terdapat kesalahan dalam penulisan nama &amp; gelar
@@ -184,17 +165,18 @@ function CoverContent({ onOpen, guestName: guestNameProp }: WeddingCoverProps) {
         <button
           onClick={onOpen}
           style={{
-            backgroundColor: "#ffffff",
-            color: "#543d2b",
-            border: "1px solid #b8a695",
+            backgroundColor: "rgba(255, 255, 255, 0.25)",
+            color: "#ffffff",
+            border: "1px solid rgba(255, 255, 255, 0.7)",
             padding: "12px 36px",
             fontSize: "0.78rem",
             letterSpacing: "2px",
             textTransform: "uppercase",
             borderRadius: "30px",
             cursor: "pointer",
-            boxShadow: "0 4px 15px rgba(107, 79, 53, 0.08)",
-            transition: "transform 0.2s ease",
+            backdropFilter: "blur(8px)",
+            boxShadow: "0 4px 15px rgba(0, 0, 0, 0.3)",
+            transition: "all 0.2s ease",
             fontFamily: "sans-serif",
             fontWeight: "500",
           }}

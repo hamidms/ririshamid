@@ -14,12 +14,10 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
   useEffect(() => {
     if (isOpen) {
       setShouldRender(true);
-      // Beri sedikit delay micro-task agar transisi CSS bisa berjalan
       const timer = setTimeout(() => setAnimate(true), 10);
       return () => clearTimeout(timer);
     } else {
       setAnimate(false);
-      // Tunggu hingga transisi fade-out selesai sebelum meremove dari DOM (300ms)
       const timer = setTimeout(() => setShouldRender(false), 300);
       return () => clearTimeout(timer);
     }
@@ -37,22 +35,20 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
 
   // Data Rundown / Rangkaian Acara
   const rundownData = [
-    { time: "10.00", event: "Registration & Open Gate" },
-    { time: "11.00", event: "Opening Speech" },
-    { time: "11.15", event: "Local Band 1" },
-    { time: "12.00", event: "Local Band 2" },
-    { time: "12.45", event: "DJ Set 1" },
-    { time: "13.30", event: "Games & Intermezzo" },
-    { time: "14.00", event: "Guest Band A" },
-    { time: "15.00", event: "DJ Set 2" },
-    { time: "16.00", event: "National Band" },
-    { time: "17.00", event: "Sunset Break / F&B Time" },
-    { time: "17.30", event: "Special Performance" },
-    { time: "18.30", event: "Closing / DJ Final Set" },
+    { time: "09.00", event: "Akad" },
+    { time: "09.00", event: "Pasrah Tampi" },
+    { time: "11.00", event: "Kirab Pengantin" },
+    { time: "11.30", event: "Live Music" },
+    { time: "13.00", event: "Closing Session 1" },
   ];
 
   return (
     <>
+      {/* IMPORT GOOGLE FONT PINYON SCRIPT */}
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Pinyon+Script&display=swap');
+      `}</style>
+
       {/* OVERLAY / BACKDROP DENGAN FADE */}
       <div
         onClick={onClose}
@@ -87,7 +83,6 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
           flexDirection: "column",
           overflow: "hidden",
           fontFamily: "'Comic Sans MS', 'Chalkboard SE', 'Caveat', cursive, sans-serif",
-          // Efek Transisi Fade dan Zoom In halus
           opacity: animate ? 1 : 0,
           transform: animate ? "scale(1) translateY(0)" : "scale(0.95) translateY(20px)",
           transition: "opacity 300ms cubic-bezier(0.4, 0, 0.2, 1), transform 300ms cubic-bezier(0.4, 0, 0.2, 1)",
@@ -102,7 +97,7 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
             right: "20px",
             width: "36px",
             height: "36px",
-            backgroundColor: "#d63031",
+            backgroundColor: "#cb808b", // Warna pink
             color: "white",
             border: "none",
             borderRadius: "50%",
@@ -129,20 +124,18 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
           }}
         >
           {/* ================= SECTION 1: TANGGAL ================= */}
-          <section style={{ marginBottom: "50px", textAlign: "center" }}>
+          <section style={{ marginBottom: "40px", textAlign: "center" }}>
             <h1
               style={{
-                fontSize: "2.8rem",
-                color: "#2d5a27",
-                margin: "0 0 20px 0",
-                lineHeight: "1.1",
-                fontWeight: "900",
-                letterSpacing: "1px",
+                fontFamily: "'Pinyon Script', cursive",
+                fontSize: "3.5rem",
+                color: "#162a40", // Warna biru
+                margin: "0 0 10px 0",
+                lineHeight: "1.2",
+                fontWeight: "400",
               }}
             >
-              Catat
-              <br />
-              Tanggalnya!!
+              Save the Date!
             </h1>
 
             <div
@@ -158,8 +151,8 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
                   display: "grid",
                   gridTemplateColumns: `repeat(${calendarData.length}, 1fr)`,
                   width: "100%",
-                  borderTop: "3px solid #2d5a27",
-                  borderBottom: "3px solid #2d5a27",
+                  borderTop: "3px solid #162a40",
+                  borderBottom: "3px solid #162a40",
                 }}
               >
                 {calendarData.map((item, idx) => (
@@ -169,7 +162,7 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
                       display: "flex",
                       flexDirection: "column",
                       alignItems: "center",
-                      borderRight: idx < calendarData.length - 1 ? "3px solid #2d5a27" : "none",
+                      borderRight: idx < calendarData.length - 1 ? "3px solid #162a40" : "none",
                       paddingBottom: "15px",
                     }}
                   >
@@ -178,10 +171,10 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
                         width: "100%",
                         textAlign: "center",
                         padding: "8px 0",
-                        borderBottom: "3px solid #2d5a27",
+                        borderBottom: "3px solid #162a40",
                         fontSize: "1rem",
                         fontWeight: "bold",
-                        color: "#2d5a27",
+                        color: "#162a40", // Warna biru
                       }}
                     >
                       {item.dayName}
@@ -201,7 +194,7 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
                         style={{
                           fontSize: "2.8rem",
                           fontWeight: "900",
-                          color: "#2d5a27",
+                          color: "#162a40", // Warna biru
                           zIndex: 2,
                         }}
                       >
@@ -222,7 +215,7 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
                           <path
                             d="M 50 12 C 72 10, 92 28, 88 52 C 84 76, 62 90, 42 88 C 22 86, 10 66, 14 44 C 18 22, 38 12, 58 10"
                             fill="none"
-                            stroke="#8b2626"
+                            stroke="#cb808b" // Warna pink
                             strokeWidth="2.5"
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -230,7 +223,7 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
                           <path
                             d="M 55 15 C 75 12, 90 32, 85 54 C 80 74, 58 86, 38 84 C 18 82, 12 62, 16 42 C 20 24, 42 14, 62 13 C 78 12, 86 28, 84 45"
                             fill="none"
-                            stroke="#8b2626"
+                            stroke="#cb808b" // Warna pink
                             strokeWidth="1.8"
                             strokeLinecap="round"
                             strokeLinejoin="round"
@@ -245,20 +238,8 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
             </div>
           </section>
 
-          {/* ================= SECTION 2: RANGKAIAN ACARA ================= */}
+          {/* ================= SECTION 2: RANGKAIAN ACARA (RUNDOWN) ================= */}
           <section style={{ maxWidth: "500px", margin: "0 auto 50px auto" }}>
-            <h2
-              style={{
-                textAlign: "center",
-                fontSize: "2.3rem",
-                color: "#2d5a27",
-                margin: "0 0 25px 0",
-                fontWeight: "900",
-              }}
-            >
-              Rangkaian Acara
-            </h2>
-
             <div
               style={{
                 display: "flex",
@@ -274,14 +255,14 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
                     alignItems: "center",
                     justifyContent: "space-between",
                     padding: "12px 10px",
-                    borderBottom: "1px solid rgba(45, 90, 39, 0.25)",
+                    borderBottom: "1px solid rgba(22, 42, 64, 0.25)",
                   }}
                 >
                   <span
                     style={{
                       fontSize: "1.1rem",
                       fontWeight: "800",
-                      color: "#2d5a27",
+                      color: "#162a40", // Warna biru
                       width: "70px",
                       textAlign: "left",
                     }}
@@ -292,7 +273,7 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
                   <span
                     style={{
                       fontSize: "1.1rem",
-                      color: "#8b2626",
+                      color: "#cb808b", // Warna pink
                       margin: "0 15px",
                       display: "inline-block",
                     }}
@@ -304,7 +285,7 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
                     style={{
                       fontSize: "1rem",
                       fontWeight: "600",
-                      color: "#2d5a27",
+                      color: "#162a40", // Warna biru
                       flex: 1,
                       textAlign: "left",
                     }}
@@ -320,14 +301,15 @@ export default function CalendarModalBox({ isOpen, onClose }: CalendarModalBoxPr
           <section style={{ maxWidth: "500px", margin: "0 auto", paddingBottom: "30px" }}>
             <h2
               style={{
+                fontFamily: "'Pinyon Script', cursive",
                 textAlign: "center",
                 fontSize: "2.3rem",
-                color: "#2d5a27",
+                color: "#162a40", // Warna biru
                 margin: "0 0 20px 0",
                 fontWeight: "900",
               }}
             >
-              Titik Acara
+              Our Location
             </h2>
 
             <a
