@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, Suspense } from "react";
+import React, { useState, useRef, useEffect, Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { OrbitControls, OrthographicCamera } from "@react-three/drei";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
@@ -69,7 +69,20 @@ export default function Scene3D({
   setIsInteracting,
 }: Scene3DProps) {
   const [shouldRotate, setShouldRotate] = useState(true);
+  const [isTabActive, setIsTabActive] = useState(true); // State untuk mendeteksi status tab
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  // Efek untuk mendeteksi apakah tab sedang dibuka atau ditinggalkan
+  useEffect(() => {
+    const handleVisibilityChange = () => {
+      setIsTabActive(!document.hidden);
+    };
+
+    document.addEventListener("visibilitychange", handleVisibilityChange);
+    return () => {
+      document.removeEventListener("visibilitychange", handleVisibilityChange);
+    };
+  }, []);
 
   const handleStart = () => {
     setShouldRotate(false);
@@ -86,7 +99,8 @@ export default function Scene3D({
   };
 
   return (
-    <Canvas>
+    /* frameloop="never" akan mematikan render loop & rotasi saat tab tidak aktif */
+    <Canvas frameloop={isTabActive ? "always" : "never"}>
       <OrthographicCamera
         makeDefault
         position={[8, 18, 10]}

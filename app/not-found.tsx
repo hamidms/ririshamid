@@ -55,7 +55,7 @@ export default function NotFound() {
             textShadow: "0 1px 2px rgba(255, 255, 255, 0.8)",
           }}
         >
-          <p style={{ margin: "60px 0 12px 0" }}>
+          <p style={{ margin: "55px 0 12px 0" }}>
             aku menyukai langit<br />
             teriknya terasa hangat<br />
             badainya terdengar merdu<br />
