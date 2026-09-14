@@ -3,11 +3,12 @@
 import React, { useState } from "react";
 import CalendarModalBox from "@/components/CalendarModalBox";
 import BookModalBox from "@/components/BookModalBox";
-import GalleryModalBox from "@/components/GalleryModalBox"; // Import GalleryModalBox
+import GalleryModalBox from "@/components/GalleryModalBox";
 import PhoneModalBox from "@/components/PhoneModalBox";
 import CoupleModalBox from "@/components/CoupleModalBox";
 import GiftModalBox from "@/components/GiftModalBox";
 import AudioModalBox from "@/components/AudioModalBox";
+import RingModalBox from "@/components/RingModalBox"; // 1. Import RingModalBox
 
 interface ModalContainerProps {
   activeModel: string | null;
@@ -32,7 +33,6 @@ export default function ModalContainer({
   togglePlay,
   progress,
 }: ModalContainerProps) {
-  // State khusus untuk kontrol GalleryModalBox
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
   return (
@@ -40,17 +40,18 @@ export default function ModalContainer({
       <CoupleModalBox isOpen={activeModel === "Couple"} onClose={() => setActiveModel(null)} />
       <CalendarModalBox isOpen={activeModel === "Calendar"} onClose={() => setActiveModel(null)} />
       
-      {/* BookModalBox dengan trigger untuk membuka GalleryModalBox */}
+      {/* 2. Modal Box untuk Ring */}
+      <RingModalBox isOpen={activeModel === "Ring"} onClose={() => setActiveModel(null)} />
+
       <BookModalBox
         isOpen={activeModel === "Book"}
         onClose={() => setActiveModel(null)}
         onOpenGallery={() => {
-          setActiveModel(null); // Tutup BookModalBox
-          setIsGalleryOpen(true); // Buka GalleryModalBox
+          setActiveModel(null);
+          setIsGalleryOpen(true);
         }}
       />
 
-      {/* GalleryModalBox */}
       <GalleryModalBox
         isOpen={isGalleryOpen}
         onClose={() => setIsGalleryOpen(false)}

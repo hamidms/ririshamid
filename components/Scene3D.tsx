@@ -150,8 +150,9 @@ export default function Scene3D({
           <CalendarModel onSelect={() => setActiveModel("Calendar")} />
         </group>
 
+        {/* Ganti bagian RingModel pada Scene3D.tsx */}
         <group position={[0.4, -2.3, 1]} rotation={[0, 0, 0]}>
-          <RingModel onSelect={() => setActiveModel("Cincin Aksesoris Emas")} />
+          <RingModel onSelect={() => setActiveModel("Ring")} />
         </group>
       </Suspense>
 
