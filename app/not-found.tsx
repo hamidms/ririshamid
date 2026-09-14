@@ -12,17 +12,14 @@ export default function NotFound() {
         height: "100vh",
         zIndex: 99999,
         display: "flex",
-        flexDirection: "column",
-        justifyContent: "center",
-        alignItems: "center",
+        justifyContent: "flex-end", // Geser ke sisi kanan
+        alignItems: "flex-start",   // Geser ke agak atas
         boxSizing: "border-box",
-        padding: "24px",
-        color: "#ffffff",
-        textAlign: "center",
+        padding: "48px 24px 24px 24px",
         overflow: "hidden",
       }}
     >
-      {/* BACKGROUND IMAGE WITH BLUR & OVERLAY */}
+      {/* BACKGROUND IMAGE */}
       <div
         style={{
           position: "absolute",
@@ -30,99 +27,63 @@ export default function NotFound() {
           left: 0,
           width: "100%",
           height: "100%",
-          backgroundImage:
-            "linear-gradient(to bottom, rgba(0, 0, 0, 0.65), rgba(0, 0, 0, 0.85)), url('/gallery/couple/couple.jpg')",
+          backgroundImage: "url('/gallery/couple/not-found.jpg')",
           backgroundSize: "cover",
           backgroundPosition: "center",
-          filter: "blur(4px)",
-          transform: "scale(1.05)",
           zIndex: -1,
         }}
       />
 
-      {/* KONTEN UTAMA 404 */}
+      {/* KONTEN PUISI & TOMBOL */}
       <div
         style={{
-          maxWidth: "400px",
+          maxWidth: "340px",
           display: "flex",
           flexDirection: "column",
-          alignItems: "center",
-          gap: "16px",
+          alignItems: "flex-end", // Elemen di dalamnya rata kanan
+          textAlign: "right",     // Teks puisi rata kanan
+          color: "#2c3e50",       // Warna teks gelap agar terbaca di area langit terang
         }}
       >
-        <p
+        <div
           style={{
             fontFamily: "'Georgia', serif",
-            fontSize: "0.9rem",
-            letterSpacing: "4px",
-            textTransform: "uppercase",
-            opacity: 0.8,
-            margin: 0,
-            textShadow: "1px 1px 4px rgba(0,0,0,0.5)",
-          }}
-        >
-          The Wedding of Riris & Hamid
-        </p>
-
-        <h1
-          style={{
-            fontFamily: "'Georgia', serif",
-            fontSize: "6rem",
-            fontWeight: "normal",
-            margin: 0,
-            lineHeight: 1,
-            color: "#f1c40f",
-            textShadow: "2px 2px 12px rgba(0,0,0,0.6)",
-          }}
-        >
-          404
-        </h1>
-
-        <h2
-          style={{
-            fontFamily: "'Georgia', serif",
-            fontSize: "1.5rem",
-            fontWeight: "normal",
+            fontSize: "0.55rem",
+            lineHeight: "1.5",
             fontStyle: "italic",
-            margin: 0,
-            textShadow: "1px 1px 4px rgba(0,0,0,0.5)",
+            marginBottom: "24px",
+            textShadow: "0 1px 2px rgba(255, 255, 255, 0.8)",
           }}
         >
-          Halaman Tidak Ditemukan
-        </h2>
+          <p style={{ margin: "60px 0 12px 0" }}>
+            aku menyukai langit<br />
+            teriknya terasa hangat<br />
+            badainya terdengar merdu<br />
+            awan mendungnya menenangkan
+          </p>
 
-        <p
-          style={{
-            fontSize: "0.85rem",
-            lineHeight: "1.6",
-            opacity: 0.85,
-            margin: "8px 0 24px 0",
-            fontFamily: "sans-serif",
-            textShadow: "1px 1px 3px rgba(0,0,0,0.5)",
-          }}
-        >
-          Maaf, halaman yang Anda cari tidak ada atau telah dipindahkan.
-        </p>
+          <p style={{ margin: "0 0 12px 0" }}>
+            aku menyukai bumi<br />
+            hutannya melindungi<br />
+            pantai dan lautnya megah<br />
+            merawat segala yang tumbuh
+          </p>
 
-        {/* TOMBOL KEMBALI KE UNDANGAN */}
-        <Link
-          href="/"
-          style={{
-            display: "inline-block",
-            backgroundColor: "#ffffff",
-            color: "#1e272e",
-            textDecoration: "none",
-            padding: "12px 32px",
-            fontSize: "0.9rem",
-            fontWeight: "600",
-            borderRadius: "30px",
-            boxShadow: "0 5px 20px rgba(0,0,0,0.4)",
-            letterSpacing: "1px",
-            fontFamily: "sans-serif",
-          }}
-        >
-          🏠 Kembali ke Undangan
-        </Link>
+          <p style={{ margin: "0 0 12px 0" }}>
+            aku menyukai keindahan<br />
+            seperti sekilas sinar matahari<br />
+            bias hujan yang menyusun pelangi<br />
+            berlian langka yang keras namun cantik
+          </p>
+
+          <p style={{ margin: 0 }}>
+            pada dunia yang penuh dengan puisi<br />
+            kutulis syair pujian tentangmu<br />
+            dalam cerita dan mimpi<br />
+            <strong>aku menyukaimu</strong>
+          </p>
+        </div>
+
       </div>
     </div>
   );
