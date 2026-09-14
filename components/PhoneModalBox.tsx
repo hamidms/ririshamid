@@ -9,7 +9,7 @@ interface PhoneModalBoxProps {
 }
 
 // ==========================================
-// INTERFACE UNTUK DATA PESAN SUPABASE (TABEL TAMU)
+// INTERFACE UNTUK DATA PESAN SUPABASE
 // ==========================================
 interface MessageData {
   id: number;
@@ -47,9 +47,33 @@ function MessageList({ refreshTrigger }: { refreshTrigger: number }) {
     fetchMessages();
   }, [refreshTrigger]);
 
+  // Skema warna nama tamu
+  const getNameColor = (item: MessageData) => {
+    if (item.kehadiran === "tidak-hadir") {
+      return "#e84393"; // Pink untuk tidak hadir
+    }
+    if (item.jumlah_orang === 1 || item.kehadiran === "datang-sendiri") {
+      return "#8e44ad"; // Ungu untuk hadir 1 orang
+    }
+    if (item.jumlah_orang === 2 || item.kehadiran === "datang-berdua") {
+      return "#2980b9"; // Biru untuk hadir 2 orang
+    }
+    return "#162a40"; // Fallback ke warna utama
+  };
+
+  const formatDate = (dateString?: string) => {
+    if (!dateString) return "";
+    const date = new Date(dateString);
+    const day = date.getDate().toString().padStart(2, "0");
+    const month = (date.getMonth() + 1).toString().padStart(2, "0");
+    const hours = date.getHours().toString().padStart(2, "0");
+    const minutes = date.getMinutes().toString().padStart(2, "0");
+    return `${day}/${month}, ${hours}:${minutes}`;
+  };
+
   if (loading) {
     return (
-      <div style={{ textAlign: "center", padding: "20px 0", color: "#7a695e", fontFamily: "sans-serif", fontSize: "0.9rem" }}>
+      <div style={{ textAlign: "center", padding: "20px 0", color: "#162a40", fontFamily: "sans-serif", fontSize: "0.9rem", opacity: 0.8 }}>
         Memuat ucapan...
       </div>
     );
@@ -57,7 +81,7 @@ function MessageList({ refreshTrigger }: { refreshTrigger: number }) {
 
   if (messages.length === 0) {
     return (
-      <div style={{ textAlign: "center", padding: "20px 0", color: "#aba094", fontStyle: "italic", fontFamily: "sans-serif", fontSize: "0.85rem" }}>
+      <div style={{ textAlign: "center", padding: "20px 0", color: "#162a40", fontStyle: "italic", fontFamily: "sans-serif", fontSize: "0.85rem", opacity: 0.6 }}>
         Belum ada ucapan yang tersimpan.
       </div>
     );
@@ -70,9 +94,9 @@ function MessageList({ refreshTrigger }: { refreshTrigger: number }) {
           fontFamily: "'Georgia', serif",
           fontSize: "1.4rem",
           fontStyle: "italic",
-          color: "#4a3b32",
+          color: "#162a40",
           marginBottom: "16px",
-          borderTop: "1px dashed rgba(74, 59, 50, 0.15)",
+          borderTop: "1px dashed rgba(22, 42, 64, 0.15)",
           paddingTop: "24px",
         }}
       >
@@ -91,63 +115,49 @@ function MessageList({ refreshTrigger }: { refreshTrigger: number }) {
                 padding: "16px",
                 borderRadius: "12px",
                 border: "1px solid #e3dcce",
-                boxShadow: "0 2px 8px rgba(74, 59, 50, 0.05)",
+                boxShadow: "0 2px 8px rgba(22, 42, 64, 0.05)",
                 display: "flex",
                 flexDirection: "column",
-                gap: "12px",
+                gap: "10px",
               }}
             >
-              {/* Bagian Atas Informasi Tamu */}
+              {/* Header Kartu: Nama (Kiri) & Tanggal (Kanan) */}
               <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
                 <span
                   style={{
-                    fontSize: "0.75rem",
+                    fontSize: "0.9rem",
                     fontWeight: "bold",
                     fontFamily: "sans-serif",
-                    padding: "4px 8px",
-                    borderRadius: "6px",
-                    backgroundColor: item.kehadiran === "tidak-hadir" ? "rgba(214, 48, 49, 0.1)" : "rgba(74, 59, 50, 0.08)",
-                    color: item.kehadiran === "tidak-hadir" ? "#d63031" : "#4a3b32",
+                    color: getNameColor(item),
                   }}
                 >
-                  {item.kehadiran === "tidak-hadir" ? "❌ Absen" : `✅ Hadir (${item.jumlah_orang} Orang)`}
+                  {item.nama || "Tamu"}
                 </span>
+
                 {timeStamp && (
-                  <span style={{ fontSize: "0.7rem", color: "#aba094", fontFamily: "sans-serif" }}>
-                    {new Date(timeStamp).toLocaleDateString("id-ID", {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
+                  <span style={{ fontSize: "0.75rem", color: "#162a40", opacity: 0.6, fontFamily: "sans-serif" }}>
+                    {formatDate(timeStamp)}
                   </span>
                 )}
               </div>
-
-              {/* Nama Pengirim jika ada */}
-              {item.nama && (
-                <div style={{ fontSize: "0.85rem", fontWeight: "bold", color: "#4a3b32", fontFamily: "sans-serif" }}>
-                  Dari: {item.nama}
-                </div>
-              )}
 
               {/* Konten Pesan */}
               <p
                 style={{
                   fontFamily: "sans-serif",
                   fontSize: "0.9rem",
-                  color: "#3e3129",
+                  color: "#162a40",
                   margin: 0,
                   lineHeight: "1.4",
                   whiteSpace: "pre-wrap",
-                  fontStyle: "italic",
                 }}
               >
-                "{item.pesan || "Tanpa pesan teks."}"
+                {item.pesan || "Tanpa pesan teks."}
               </p>
 
               {/* Konten Audio VN jika tersedia */}
               {item.audio_url && (
                 <div style={{ display: "flex", flexDirection: "column", gap: "4px", paddingTop: "4px" }}>
-                  <span style={{ fontSize: "0.75rem", color: "#7a695e", fontFamily: "sans-serif", fontWeight: "bold" }}>🎙️ Voice Note:</span>
                   <audio src={item.audio_url} controls preload="metadata" style={{ width: "100%", height: "32px" }} />
                 </div>
               )}
@@ -160,10 +170,9 @@ function MessageList({ refreshTrigger }: { refreshTrigger: number }) {
 }
 
 // ==========================================
-// KOMPONEN UTAMA: PHONE MODAL BOX DENGAN ANIMASI FADE
+// KOMPONEN UTAMA: PHONE MODAL BOX DENGAN WAKTU & WARNA DISEDERHANAKAN
 // ==========================================
 export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModalBoxProps) {
-  // State Animasi Fade & Mounting
   const [shouldRender, setShouldRender] = useState(false);
   const [animate, setAnimate] = useState(false);
 
@@ -180,12 +189,10 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
   // State Pemicu Refresh List Pesan
   const [refreshTrigger, setRefreshTrigger] = useState(0);
 
-  // Ref untuk menyimpan instance MediaRecorder & Timer
   const mediaRecorderRef = useRef<MediaRecorder | null>(null);
   const audioChunksRef = useRef<Blob[]>([]);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Menangani animasi Fade-in & Fade-out saat isOpen berubah
   useEffect(() => {
     if (isOpen) {
       setShouldRender(true);
@@ -198,14 +205,12 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
     }
   }, [isOpen]);
 
-  // Cleanup Object URL saat unmount/modal ditutup
   useEffect(() => {
     return () => {
       if (audioUrl) URL.revokeObjectURL(audioUrl);
     };
   }, [audioUrl]);
 
-  // Efek menghitung durasi saat merekam
   useEffect(() => {
     if (isRecording) {
       timerRef.current = setInterval(() => {
@@ -221,7 +226,6 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
 
   if (!shouldRender) return null;
 
-  // Deteksi MIME type audio yang didukung oleh browser
   const getSupportedMimeType = () => {
     const types = ["audio/webm", "audio/mp4", "audio/ogg", "audio/aac"];
     for (const type of types) {
@@ -232,7 +236,6 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
     return "";
   };
 
-  // Fungsi Mulai Merekam VN
   const startRecording = async () => {
     try {
       const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -272,7 +275,6 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
     }
   };
 
-  // Fungsi Berhenti Merekam
   const stopRecording = () => {
     if (mediaRecorderRef.current && isRecording) {
       mediaRecorderRef.current.stop();
@@ -280,7 +282,6 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
     }
   };
 
-  // Fungsi Menghapus Rekaman VN
   const deleteRecording = () => {
     if (audioUrl) URL.revokeObjectURL(audioUrl);
     setAudioBlob(null);
@@ -288,7 +289,6 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
     setRecordingTime(0);
   };
 
-  // Format Detik ke Menit:Detik (00:00)
   const formatTime = (seconds: number) => {
     const mins = Math.floor(seconds / 60);
     const secs = seconds % 60;
@@ -349,7 +349,7 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
 
   return (
     <>
-      {/* OVERLAY / BACKDROP DENGAN FADE IN/OUT */}
+      {/* OVERLAY / BACKDROP */}
       <div
         onClick={onClose}
         style={{
@@ -366,7 +366,7 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
         }}
       />
 
-      {/* TOMBOL SILANG FIXED DENGAN FADE IN/OUT */}
+      {/* TOMBOL SILANG FIXED DENGAN WARNA #cb808b */}
       <button
         onClick={onClose}
         style={{
@@ -375,7 +375,7 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
           right: "calc(5% + 15px)",
           width: "35px",
           height: "35px",
-          backgroundColor: "#d63031",
+          backgroundColor: "#cb808b",
           color: "white",
           border: "none",
           borderRadius: "50%",
@@ -394,7 +394,7 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
         ✕
       </button>
 
-      {/* MODAL UTAMA DENGAN FADE IN/OUT & SCALE ANIMATION */}
+      {/* MODAL UTAMA */}
       <div
         style={{
           position: "fixed",
@@ -409,7 +409,7 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
           boxSizing: "border-box",
           display: "flex",
           flexDirection: "column",
-          backgroundImage: "linear-gradient(to right, rgba(74, 59, 50, 0.04) 1px, transparent 1px)",
+          backgroundImage: "linear-gradient(to right, rgba(22, 42, 64, 0.04) 1px, transparent 1px)",
           backgroundSize: "20px 100%",
           overflow: "hidden",
           opacity: animate ? 1 : 0,
@@ -422,7 +422,7 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
           style={{
             padding: "25px 20px 15px 20px",
             position: "relative",
-            borderBottom: "1px dashed rgba(74, 59, 50, 0.1)",
+            borderBottom: "1px dashed rgba(22, 42, 64, 0.15)",
           }}
         >
           <h1
@@ -431,29 +431,13 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
               fontSize: "2.4rem",
               fontStyle: "italic",
               fontWeight: "normal",
-              color: "#4a3b32",
+              color: "#162a40",
               margin: 0,
             }}
           >
             Kirim Pesan
           </h1>
 
-          {guestName && (
-            <p style={{ margin: "4px 0 0 0", fontSize: "0.9rem", color: "#7a695e", fontFamily: "sans-serif" }}>
-              Dari: <strong>{guestName}</strong>
-            </p>
-          )}
-
-          <div
-            style={{
-              width: "100%",
-              height: "10px",
-              backgroundImage:
-                "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 12' width='100%25' height='12' preserveAspectRatio='none'%3E%3Cpath d='M0,6 C150,12 150,0 300,6 C450,12 450,0 600,6 C750,12 750,0 900,6 C1050,12 1050,0 1200,6' fill='none' stroke='%234a3b32' stroke-width='2'/%3E%3C/svg%3E\")",
-              backgroundRepeat: "repeat-x",
-              margin: "8px 0 0 0",
-            }}
-          />
         </div>
 
         {/* AREA FORM & LIST (SCROLLABLE) */}
@@ -471,7 +455,7 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
         >
           {/* 1. INPUT TEXT */}
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-            <label style={{ fontFamily: "'Georgia', serif", fontStyle: "italic", color: "#4a3b32", fontSize: "1.1rem" }}>
+            <label style={{ fontFamily: "'Georgia', serif", fontStyle: "italic", color: "#162a40", fontSize: "1.1rem" }}>
               Silakan masukkan pesan:
             </label>
             <textarea
@@ -488,7 +472,7 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
                 backgroundColor: "#ffffff",
                 fontFamily: "sans-serif",
                 fontSize: "0.9rem",
-                color: "#3e3129",
+                color: "#162a40",
                 boxSizing: "border-box",
                 outline: "none",
               }}
@@ -497,7 +481,7 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
 
           {/* 2. PILIHAN KEHADIRAN */}
           <div style={{ display: "flex", flexDirection: "column", gap: "10px" }}>
-            <label style={{ fontFamily: "'Georgia', serif", fontStyle: "italic", color: "#4a3b32", fontSize: "1.1rem" }}>
+            <label style={{ fontFamily: "'Georgia', serif", fontStyle: "italic", color: "#162a40", fontSize: "1.1rem" }}>
               Konfirmasi Kehadiran:
             </label>
             <div style={{ display: "flex", flexDirection: "column", gap: "12px" }}>
@@ -513,7 +497,7 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
                     alignItems: "center",
                     gap: "10px",
                     fontSize: "0.95rem",
-                    color: "#5c4d42",
+                    color: "#162a40",
                     fontFamily: "sans-serif",
                     cursor: "pointer",
                   }}
@@ -524,7 +508,7 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
                     value={option.id}
                     checked={kehadiran === option.id}
                     onChange={(e) => setKehadiran(e.target.value)}
-                    style={{ accentColor: "#4a3b32", width: "18px", height: "18px" }}
+                    style={{ accentColor: "#cb808b", width: "18px", height: "18px" }}
                   />
                   {option.label}
                 </label>
@@ -534,7 +518,7 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
 
           {/* 3. MODUL VOICE NOTE */}
           <div style={{ display: "flex", flexDirection: "column", gap: "8px" }}>
-            <label style={{ fontFamily: "'Georgia', serif", fontStyle: "italic", color: "#4a3b32", fontSize: "1.1rem" }}>
+            <label style={{ fontFamily: "'Georgia', serif", fontStyle: "italic", color: "#162a40", fontSize: "1.1rem" }}>
               Pesan Suara / Voice Note (Opsional):
             </label>
 
@@ -560,7 +544,7 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
                     alignItems: "center",
                     gap: "8px",
                     padding: "10px 18px",
-                    backgroundColor: "#1e56e3",
+                    backgroundColor: "#cb808b",
                     color: "white",
                     border: "none",
                     borderRadius: "20px",
@@ -570,7 +554,7 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
                     fontSize: "0.85rem",
                   }}
                 >
-                  🎙️ Mulai Rekam VN
+                  🎙️ Pesan Suara
                 </button>
               )}
 
@@ -579,15 +563,14 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
                   <div style={{ display: "flex", alignItems: "center", gap: "8px" }}>
                     <span
                       style={{
-                        width: "100%",
+                        width: "10px",
                         height: "10px",
-                        maxWidth: "10px",
-                        backgroundColor: "#d63031",
+                        backgroundColor: "#cb808b",
                         borderRadius: "50%",
                         animation: "pulse 1s infinite alternate",
                       }}
                     />
-                    <span style={{ fontFamily: "monospace", fontSize: "1.2rem", fontWeight: "bold", color: "#4a3b32" }}>
+                    <span style={{ fontFamily: "monospace", fontSize: "1.2rem", fontWeight: "bold", color: "#162a40" }}>
                       {formatTime(recordingTime)}
                     </span>
                   </div>
@@ -596,7 +579,7 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
                     onClick={stopRecording}
                     style={{
                       padding: "8px 16px",
-                      backgroundColor: "#d63031",
+                      backgroundColor: "#cb808b",
                       color: "white",
                       border: "none",
                       borderRadius: "20px",
@@ -619,8 +602,8 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
                     style={{
                       padding: "4px 12px",
                       backgroundColor: "transparent",
-                      color: "#d63031",
-                      border: "1px solid #d63031",
+                      color: "#cb808b",
+                      border: "1px solid #cb808b",
                       borderRadius: "12px",
                       cursor: "pointer",
                       fontSize: "0.75rem",
@@ -640,15 +623,15 @@ export default function PhoneModalBox({ isOpen, onClose, guestName }: PhoneModal
             style={{
               marginTop: "10px",
               padding: "14px",
-              backgroundColor: "#4a3b32",
-              color: "#fbf9f5",
+              backgroundColor: "#cb808b",
+              color: "#ffffff",
               border: "none",
               borderRadius: "8px",
               fontFamily: "'Georgia', serif",
               fontSize: "1.1rem",
               fontStyle: "italic",
               cursor: "pointer",
-              boxShadow: "0 4px 12px rgba(74, 59, 50, 0.2)",
+              boxShadow: "0 4px 12px rgba(203, 128, 139, 0.3)",
             }}
           >
             Kirim Pesan ➔
