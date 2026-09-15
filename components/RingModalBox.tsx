@@ -283,7 +283,7 @@ export default function RingModalBox({ isOpen, onClose }: RingModalBoxProps) {
               textShadow: "0 1px 4px rgba(0,0,0,0.5)",
             }}
           >
-            WAKTU SAAT INI
+            Until we Say
           </div>
           <div
             style={{
@@ -294,7 +294,7 @@ export default function RingModalBox({ isOpen, onClose }: RingModalBoxProps) {
               textShadow: "0 2px 8px rgba(0,0,0,0.6)",
             }}
           >
-            {currentTimeStr}
+            I Do
           </div>
         </div>
       </div>

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, Suspense } from "react";
+import React, { useState, useEffect, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { supabase } from "@/lib/supabase";
 
@@ -32,6 +32,9 @@ function HomeContent() {
   const [isFadingOut, setIsFadingOut] = useState(false);
   const [isInteracting, setIsInteracting] = useState(false);
   const [wasPlayingBeforeModal, setWasPlayingBeforeModal] = useState(false);
+
+  // 1. Gunakan Ref untuk melacak apakah user SUDAH PERNAH membuka modal lain
+  const hasOpenedOtherModalRef = useRef(false);
 
   const {
     audioRef,
@@ -100,6 +103,30 @@ function HomeContent() {
     }, 600);
   };
 
+  // 2. Wrap pemanggilan setActiveModel
+  // Jika model yang dibuka BUKAN null dan BUKAN "Tanaman Bunga Matahari", tandai ref sebagai true
+  const handleSetActiveModel = (model: string | null) => {
+    if (model !== null && model !== "Tanaman Bunga Matahari") {
+      hasOpenedOtherModalRef.current = true;
+    }
+    setActiveModel(model);
+  };
+
+  // 3. Handler khusus untuk membuka Gift
+  const handleOpenGift = (open: boolean) => {
+    if (open) {
+      // Hanya izinkan buka jika user SUDAH pernah membuka modal lain
+      if (hasOpenedOtherModalRef.current) {
+        setIsGiftOpen(true);
+      } else {
+        console.log("Harus membuka modal lain terlebih dahulu!");
+        // Kamu juga bisa menambahkan alert/toast di sini jika mau
+      }
+    } else {
+      setIsGiftOpen(false);
+    }
+  };
+
   const isAnyModalOpen = isCoverOpen || isLoading || activeModel !== null || isGiftOpen;
 
   const handleOpenInvitation = () => {
@@ -117,6 +144,8 @@ function HomeContent() {
   };
 
   const handleOpenPhoneModal = () => {
+    // Membuka Handphone juga dihitung sebagai membuka modal lain
+    hasOpenedOtherModalRef.current = true;
     setWasPlayingBeforeModal(isPlaying);
 
     if (isPlaying) {
@@ -205,21 +234,21 @@ function HomeContent() {
         onEnded={() => setIsPlaying(false)}
       />
 
-    <main
-    style={{
-        width: "100vw",
-        height: "100vh",
-        backgroundImage: "url('/gallery/assets/background.jpeg')",
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-        backgroundRepeat: "no-repeat",
-        position: "relative",
-    }}
-    >
+      <main
+        style={{
+          width: "100vw",
+          height: "100vh",
+          backgroundImage: "url('/gallery/assets/background.jpeg')",
+          backgroundSize: "cover",
+          backgroundPosition: "center",
+          backgroundRepeat: "no-repeat",
+          position: "relative",
+        }}
+      >
         <Scene3D
-          setActiveModel={setActiveModel}
+          setActiveModel={handleSetActiveModel}
           handleOpenPhoneModal={handleOpenPhoneModal}
-          setIsGiftOpen={setIsGiftOpen}
+          setIsGiftOpen={handleOpenGift}
           setIsInteracting={setIsInteracting}
         />
 
@@ -262,10 +291,10 @@ function HomeContent() {
 
       <ModalContainer
         activeModel={activeModel}
-        setActiveModel={setActiveModel}
+        setActiveModel={handleSetActiveModel}
         guestName={guestName}
         isGiftOpen={isGiftOpen}
-        setIsGiftOpen={setIsGiftOpen}
+        setIsGiftOpen={handleOpenGift}
         handleClosePhoneModal={handleClosePhoneModal}
         isPlaying={isPlaying}
         togglePlay={togglePlay}
@@ -283,7 +312,6 @@ function HomeContent() {
   );
 }
 
-// BUNGKUS DENGAN SUSPENSE UNTUK MENGHINDARI BUILD ERROR NEXT.JS
 export default function Home() {
   return (
     <Suspense fallback={<div style={{ width: "100vw", height: "100vh", backgroundColor: "#000000" }} />}>
