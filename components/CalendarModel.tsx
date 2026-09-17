@@ -9,7 +9,7 @@ interface ModelProps {
 }
 
 export default function CalendarModel({ onSelect }: ModelProps) {
-  const { scene } = useGLTF("/models/calendar/scene.gltf");
+  const { scene } = useGLTF("/models/calendar/Calendar.glb"); // Sesuaikan folder model kalendermu
 
   return (
     <group
@@ -26,7 +26,7 @@ export default function CalendarModel({ onSelect }: ModelProps) {
       }}
     >
       {/* Model utama Kalender */}
-      <primitive object={scene} scale={16} />
+      <primitive object={scene} scale={1} />
 
       {/* 1. LINGKARAN MERAH TANGGAL 15 (Sumbu X geser ke kiri) */}
       <mesh

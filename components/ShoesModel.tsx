@@ -5,12 +5,12 @@ interface ModelProps {
 }
 
 export default function ShoesModel({ onSelect }: ModelProps) {
-  const { scene } = useGLTF("/models/shoes/scene.gltf");
+  const { scene } = useGLTF("/models/shoes/Groom.glb");
 
   return (
     <primitive 
       object={scene} 
-      scale={0.5}
+      scale={1}
       onClick={(e: any) => {
         e.stopPropagation(); 
         onSelect();

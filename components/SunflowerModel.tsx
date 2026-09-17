@@ -5,12 +5,12 @@ interface ModelProps {
 }
 
 export default function SunflowerModel({ onSelect }: ModelProps) {
-  const { scene } = useGLTF("/models/sunflower/scene.gltf");
+  const { scene } = useGLTF("/models/sunflower/Bouquet.glb"); // Sesuaikan folder model bunga mataharimu
 
   return (
     <primitive 
       object={scene} 
-      scale={0.2}
+      scale={1}
       onClick={(e: any) => {
         e.stopPropagation(); 
         onSelect();

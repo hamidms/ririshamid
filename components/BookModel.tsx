@@ -5,12 +5,12 @@ interface ModelProps {
 }
 
 export default function BookModel({ onSelect }: ModelProps) {
-  const { scene } = useGLTF("/models/medieval_fantasy_book/scene.gltf");
+  const { scene } = useGLTF("/models/medieval_fantasy_book/Book.glb"); // Sesuaikan folder model bukumu
 
   return (
     <primitive 
       object={scene} 
-      scale={0.015}
+      scale={1}
       onClick={(e: any) => {
         e.stopPropagation(); 
         onSelect();

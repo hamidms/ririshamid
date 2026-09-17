@@ -5,12 +5,12 @@ interface ModelProps {
 }
 
 export default function HeadphoneModel({ onSelect }: ModelProps) {
-  const { scene } = useGLTF("/models/headphone/scene.gltf");
+  const { scene } = useGLTF("/models/headphone/Headphone.glb"); // Sesuaikan folder model headphone-mu
 
   return (
     <primitive 
       object={scene}
-      scale={0.2} 
+      scale={1} 
       onClick={(e: any) => {
         e.stopPropagation(); 
         onSelect();
