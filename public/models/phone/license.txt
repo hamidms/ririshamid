@@ -1,0 +1,11 @@
+Model Information:
+* title:	Modeling handphone
+* source:	https://sketchfab.com/3d-models/modeling-handphone-eaae05f4ae6c4be087bf2eb7887807a1
+* author:	Alfiansyah (https://sketchfab.com/Alfiansyah)
+
+Model License:
+* license type:	CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
+* requirements:	Author must be credited. Commercial use is allowed.
+
+If you use this 3D model in your project be sure to copy paste this credit wherever you share it:
+This work is based on "Modeling handphone" (https://sketchfab.com/3d-models/modeling-handphone-eaae05f4ae6c4be087bf2eb7887807a1) by Alfiansyah (https://sketchfab.com/Alfiansyah) licensed under CC-BY-4.0 (http://creativecommons.org/licenses/by/4.0/)
