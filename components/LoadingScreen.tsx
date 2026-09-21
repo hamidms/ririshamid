@@ -12,7 +12,7 @@ export default function LoadingScreen({ isFadingOut }: LoadingScreenProps) {
   // Efek simulasi loading bar berjalan mulus menuju 100% dalam 2 detik
   useEffect(() => {
     const startTime = Date.now();
-    const duration = 2000; // 2 detik
+    const duration = 5000; // 2 detik
 
     const interval = setInterval(() => {
       const elapsed = Date.now() - startTime;
