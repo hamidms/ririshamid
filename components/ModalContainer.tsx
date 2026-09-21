@@ -1,14 +1,16 @@
 "use client";
 
-import React, { useState } from "react";
-import CalendarModalBox from "@/components/CalendarModalBox";
-import BookModalBox from "@/components/BookModalBox";
-import GalleryModalBox from "@/components/GalleryModalBox";
-import PhoneModalBox from "@/components/PhoneModalBox";
-import CoupleModalBox from "@/components/CoupleModalBox";
-import GiftModalBox from "@/components/GiftModalBox";
-import AudioModalBox from "@/components/AudioModalBox";
-import RingModalBox from "@/components/RingModalBox"; // 1. Import RingModalBox
+import React, { useState, Suspense, lazy } from "react";
+
+// Dynamic Import (Lazy Loading) untuk setiap Modal Box
+const CalendarModalBox = lazy(() => import("@/components/CalendarModalBox"));
+const BookModalBox = lazy(() => import("@/components/BookModalBox"));
+const GalleryModalBox = lazy(() => import("@/components/GalleryModalBox"));
+const PhoneModalBox = lazy(() => import("@/components/PhoneModalBox"));
+const CoupleModalBox = lazy(() => import("@/components/CoupleModalBox"));
+const GiftModalBox = lazy(() => import("@/components/GiftModalBox"));
+const AudioModalBox = lazy(() => import("@/components/AudioModalBox"));
+const RingModalBox = lazy(() => import("@/components/RingModalBox"));
 
 interface ModalContainerProps {
   activeModel: string | null;
@@ -36,42 +38,74 @@ export default function ModalContainer({
   const [isGalleryOpen, setIsGalleryOpen] = useState(false);
 
   return (
-    <>
-      <CoupleModalBox isOpen={activeModel === "Couple"} onClose={() => setActiveModel(null)} />
-      <CalendarModalBox isOpen={activeModel === "Calendar"} onClose={() => setActiveModel(null)} />
-      
-      {/* 2. Modal Box untuk Ring */}
-      <RingModalBox isOpen={activeModel === "Ring"} onClose={() => setActiveModel(null)} />
+    <Suspense fallback={null}>
+      {/* 
+        Trik Performa: Hanya render elemen Modal saat benar-benar aktif/terbuka. 
+        Ini menghemat memory RAM & GPU browser secara drastis.
+      */}
+      {activeModel === "Couple" && (
+        <CoupleModalBox
+          isOpen={true}
+          onClose={() => setActiveModel(null)}
+        />
+      )}
 
-      <BookModalBox
-        isOpen={activeModel === "Book"}
-        onClose={() => setActiveModel(null)}
-        onOpenGallery={() => {
-          setActiveModel(null);
-          setIsGalleryOpen(true);
-        }}
-      />
+      {activeModel === "Calendar" && (
+        <CalendarModalBox
+          isOpen={true}
+          onClose={() => setActiveModel(null)}
+        />
+      )}
 
-      <GalleryModalBox
-        isOpen={isGalleryOpen}
-        onClose={() => setIsGalleryOpen(false)}
-      />
-      
-      <PhoneModalBox 
-        isOpen={activeModel === "Phone"} 
-        onClose={handleClosePhoneModal}
-        guestName={guestName} 
-      />
-      
-      <GiftModalBox isOpen={isGiftOpen} onClose={() => setIsGiftOpen(false)} />
+      {activeModel === "Ring" && (
+        <RingModalBox
+          isOpen={true}
+          onClose={() => setActiveModel(null)}
+        />
+      )}
 
-      <AudioModalBox
-        isOpen={activeModel === "Headphone"}
-        onClose={() => setActiveModel(null)}
-        isPlaying={isPlaying}
-        togglePlay={togglePlay}
-        progress={progress}
-      />
-    </>
+      {activeModel === "Book" && (
+        <BookModalBox
+          isOpen={true}
+          onClose={() => setActiveModel(null)}
+          onOpenGallery={() => {
+            setActiveModel(null);
+            setIsGalleryOpen(true);
+          }}
+        />
+      )}
+
+      {isGalleryOpen && (
+        <GalleryModalBox
+          isOpen={true}
+          onClose={() => setIsGalleryOpen(false)}
+        />
+      )}
+
+      {activeModel === "Phone" && (
+        <PhoneModalBox
+          isOpen={true}
+          onClose={handleClosePhoneModal}
+          guestName={guestName}
+        />
+      )}
+
+      {isGiftOpen && (
+        <GiftModalBox
+          isOpen={true}
+          onClose={() => setIsGiftOpen(false)}
+        />
+      )}
+
+      {activeModel === "Headphone" && (
+        <AudioModalBox
+          isOpen={true}
+          onClose={() => setActiveModel(null)}
+          isPlaying={isPlaying}
+          togglePlay={togglePlay}
+          progress={progress}
+        />
+      )}
+    </Suspense>
   );
 }
