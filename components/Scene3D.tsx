@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect, Suspense } from "react";
+import React, { useState, useRef, useEffect, Suspense, lazy } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
 import { 
   OrbitControls, 
@@ -10,15 +10,16 @@ import {
 } from "@react-three/drei";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
-import BookModel from "@/components/BookModel";
-import SunflowerModel from "@/components/SunflowerModel";
-import ShoesModel from "@/components/ShoesModel";
-import HeelsModel from "@/components/HeelsModel";
-import HeadphoneModel from "@/components/HeadphoneModel";
-import PhoneModel from "@/components/PhoneModel";
-import CalendarModel from "@/components/CalendarModel";
-import RingModel from "@/components/RingModel";
-import GrassModel from "@/components/GrassModel";
+// Dynamic / Lazy Import untuk setiap Model 3D
+const BookModel = lazy(() => import("@/components/BookModel"));
+const SunflowerModel = lazy(() => import("@/components/SunflowerModel"));
+const ShoesModel = lazy(() => import("@/components/ShoesModel"));
+const HeelsModel = lazy(() => import("@/components/HeelsModel"));
+const HeadphoneModel = lazy(() => import("@/components/HeadphoneModel"));
+const PhoneModel = lazy(() => import("@/components/PhoneModel"));
+const CalendarModel = lazy(() => import("@/components/CalendarModel"));
+const RingModel = lazy(() => import("@/components/RingModel"));
+const GrassModel = lazy(() => import("@/components/GrassModel"));
 
 interface Scene3DProps {
   setActiveModel: (model: string | null) => void;
@@ -75,7 +76,7 @@ export default function Scene3D({
 }: Scene3DProps) {
   const [shouldRotate, setShouldRotate] = useState(true);
   const [isTabActive, setIsTabActive] = useState(true);
-  const [dpr, setDpr] = useState<number | [number, number]>([1, 1.5]); // State dpr dinamis
+  const [dpr, setDpr] = useState<number | [number, number]>([1, 1.5]);
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -109,19 +110,11 @@ export default function Scene3D({
       frameloop={isTabActive ? "always" : "never"}
       gl={{ powerPreference: "high-performance", antialias: false }}
     >
-      {/* 1. Monitoring Performa Dinamis */}
       <PerformanceMonitor
-        onDecline={() => {
-          // Jika FPS drop di perangkat lemah/HP, turunkan DPR ke 1x
-          setDpr(1);
-        }}
-        onIncline={() => {
-          // Jika perangkat kuat/lancar, kembalikan ke batas 1.5x
-          setDpr([1, 1.5]);
-        }}
+        onDecline={() => setDpr(1)}
+        onIncline={() => setDpr([1, 1.5])}
       />
 
-      {/* 2. Membekukan kalkulasi pencahayaan/bayangan statis agar GPU hemat */}
       <BakeShadows />
 
       <OrthographicCamera
@@ -135,6 +128,7 @@ export default function Scene3D({
       <ambientLight intensity={0.9} />
       <directionalLight position={[10, 15, 10]} intensity={1.8} />
 
+      {/* Suspense akan merender model secara bertahap saat kodenya selesai di-download */}
       <Suspense fallback={null}>
         <group position={[0, -3, 0]}>
           <GrassModel />
