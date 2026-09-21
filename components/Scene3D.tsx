@@ -2,7 +2,12 @@
 
 import React, { useState, useRef, useEffect, Suspense } from "react";
 import { Canvas, useFrame } from "@react-three/fiber";
-import { OrbitControls, OrthographicCamera } from "@react-three/drei";
+import { 
+  OrbitControls, 
+  OrthographicCamera, 
+  PerformanceMonitor, 
+  BakeShadows 
+} from "@react-three/drei";
 import type { OrbitControls as OrbitControlsImpl } from "three-stdlib";
 
 import BookModel from "@/components/BookModel";
@@ -69,10 +74,10 @@ export default function Scene3D({
   setIsInteracting,
 }: Scene3DProps) {
   const [shouldRotate, setShouldRotate] = useState(true);
-  const [isTabActive, setIsTabActive] = useState(true); // State untuk mendeteksi status tab
+  const [isTabActive, setIsTabActive] = useState(true);
+  const [dpr, setDpr] = useState<number | [number, number]>([1, 1.5]); // State dpr dinamis
   const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
-  // Efek untuk mendeteksi apakah tab sedang dibuka atau ditinggalkan
   useEffect(() => {
     const handleVisibilityChange = () => {
       setIsTabActive(!document.hidden);
@@ -99,8 +104,26 @@ export default function Scene3D({
   };
 
   return (
-    /* frameloop="never" akan mematikan render loop & rotasi saat tab tidak aktif */
-    <Canvas frameloop={isTabActive ? "always" : "never"}>
+    <Canvas
+      dpr={dpr}
+      frameloop={isTabActive ? "always" : "never"}
+      gl={{ powerPreference: "high-performance", antialias: false }}
+    >
+      {/* 1. Monitoring Performa Dinamis */}
+      <PerformanceMonitor
+        onDecline={() => {
+          // Jika FPS drop di perangkat lemah/HP, turunkan DPR ke 1x
+          setDpr(1);
+        }}
+        onIncline={() => {
+          // Jika perangkat kuat/lancar, kembalikan ke batas 1.5x
+          setDpr([1, 1.5]);
+        }}
+      />
+
+      {/* 2. Membekukan kalkulasi pencahayaan/bayangan statis agar GPU hemat */}
+      <BakeShadows />
+
       <OrthographicCamera
         makeDefault
         position={[8, 18, 10]}
@@ -150,7 +173,6 @@ export default function Scene3D({
           <CalendarModel onSelect={() => setActiveModel("Calendar")} />
         </group>
 
-        {/* Ganti bagian RingModel pada Scene3D.tsx */}
         <group position={[0.4, -2.3, 1]} rotation={[0, 0, 0]}>
           <RingModel onSelect={() => setActiveModel("Ring")} />
         </group>
