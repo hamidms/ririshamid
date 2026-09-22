@@ -27,7 +27,7 @@ export default function NotFound() {
           left: 0,
           width: "100%",
           height: "100%",
-          backgroundImage: "url('/gallery/couple/not-found.jpg')",
+          backgroundImage: "url('/gallery/couple/not-found.webp')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           zIndex: -1,

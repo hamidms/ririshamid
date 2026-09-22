@@ -37,7 +37,7 @@ function CoverContent({ onOpen, guestName: guestNameProp }: WeddingCoverProps) {
           left: 0,
           width: "100%",
           height: "100%",
-          backgroundImage: "linear-gradient(to bottom, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.75)), url('/gallery/couple/cover.jpeg')",
+          backgroundImage: "linear-gradient(to bottom, rgba(0, 0, 0, 0.45), rgba(0, 0, 0, 0.75)), url('/gallery/couple/cover.webp')",
           backgroundSize: "cover",
           backgroundPosition: "center",
           filter: "blur(2px)", // Menambahkan efek blur pada background

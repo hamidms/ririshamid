@@ -35,7 +35,7 @@ export default function GiftModalBox({ isOpen, onClose }: GiftModalBoxProps) {
       contentValue: "2002709875",
       displayValue: "2002 7098 75",
       logoImg: "/gallery/assets/logo-bank-BSN.webp",
-      bgImage: "/gallery/gift/couple1.jpg",
+      bgImage: "/gallery/gift/couple1.webp",
       actionUrl: "https://wa.me/6282328928848?text=Halo%2C%20ini%20aku%20kasih%20hadiah"
     },
     {
@@ -45,7 +45,7 @@ export default function GiftModalBox({ isOpen, onClose }: GiftModalBoxProps) {
       contentValue: "8045612398",
       displayValue: "8045 6123 98",
       logoImg: "/gallery/assets/logo-bank-BCA.webp",
-      bgImage: "/gallery/gift/couple2.jpg",
+      bgImage: "/gallery/gift/couple2.webp",
       actionUrl: "https://wa.me/6282328928848?text=Halo%2C%20ini%20aku%20kasih%20hadiah"
     },
     {
@@ -194,6 +194,7 @@ export default function GiftModalBox({ isOpen, onClose }: GiftModalBoxProps) {
                     src={card.logoImg}
                     alt="Bank Logo"
                     style={{ height: "100%", maxWidth: "120px", objectFit: "contain" }}
+                    loading="lazy"
                   />
                 ) : (
                   <span style={{
@@ -219,6 +220,7 @@ export default function GiftModalBox({ isOpen, onClose }: GiftModalBoxProps) {
                   src="/gallery/assets/chip.png"
                   alt="Chip ATM"
                   style={{ width: "38px", height: "auto", borderRadius: "4px" }}
+                  loading="lazy"
                 />
 
                 {/* TOMBOL AKSI (CONFIRM/MAPS & COPY) DI KANAN ATAS/TENGAH */}
