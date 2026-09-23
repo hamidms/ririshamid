@@ -7,7 +7,7 @@ interface ModelProps {
 
 export default function PhoneModel({ onSelect }: ModelProps) {
   // Masukkan jalur file gltf/glb milikmu masing-masing
-  const { scene } = useGLTF("/models/phone/scene.gltf");
+  const { scene } = useGLTF("/models/phone/Phone.glb");
 
   return (
     <primitive 
