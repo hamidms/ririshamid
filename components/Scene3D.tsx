@@ -134,11 +134,11 @@ export default function Scene3D({
           <GrassModel />
         </group>
 
-        <group position={[0.1, -2, 0.2]} rotation={[0, 1.5, 0]}>
+        <group position={[0.1, -2, 0.2]} rotation={[0, 0, 0]}>
           <ShoesModel onSelect={() => setActiveModel("Couple")} />
         </group>
 
-        <group position={[-1, -2.3, 0.2]} rotation={[0, -0.4, 0]}>
+        <group position={[-1, -2, 0.2]} rotation={[0, 1, 0]}>
           <HeelsModel onSelect={() => setActiveModel("Couple")} />
         </group>
 

@@ -10,7 +10,7 @@ export default function HeadphoneModel({ onSelect }: ModelProps) {
   return (
     <primitive 
       object={scene}
-      scale={1} 
+      scale={0.5} 
       onClick={(e: any) => {
         e.stopPropagation(); 
         onSelect();

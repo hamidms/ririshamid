@@ -10,7 +10,7 @@ export default function BookModel({ onSelect }: ModelProps) {
   return (
     <primitive 
       object={scene} 
-      scale={1}
+      scale={0.7}
       onClick={(e: any) => {
         e.stopPropagation(); 
         onSelect();

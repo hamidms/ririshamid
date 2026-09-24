@@ -12,7 +12,7 @@ export default function CalendarModel({ onSelect }: ModelProps) {
   return (
     <primitive 
       object={scene} 
-      scale={1}
+      scale={4}s
       onClick={(e: any) => {
         e.stopPropagation(); 
         onSelect();
