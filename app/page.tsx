@@ -33,7 +33,7 @@ function HomeContent() {
   const [isInteracting, setIsInteracting] = useState(false);
   const [wasPlayingBeforeModal, setWasPlayingBeforeModal] = useState(false);
 
-  // 1. Gunakan Ref untuk melacak apakah user SUDAH PERNAH membuka modal lain
+  // Ref untuk melacak apakah user sudah pernah membuka modal lain
   const hasOpenedOtherModalRef = useRef(false);
 
   const {
@@ -78,7 +78,6 @@ function HomeContent() {
     validateGuest();
   }, [guestParam]);
 
-  // Transisi jika nama VALID
   const handleSuccessTransition = () => {
     setIsValidatingGuest(false);
     setFadeBlackOverlay(true);
@@ -87,7 +86,6 @@ function HomeContent() {
     }, 600);
   };
 
-  // Transisi mulus jika nama TIDAK VALID / 404
   const handleNotFoundTransition = () => {
     setIsNotFound(true);
     setIsValidatingGuest(false);
@@ -103,8 +101,6 @@ function HomeContent() {
     }, 600);
   };
 
-  // 2. Wrap pemanggilan setActiveModel
-  // Jika model yang dibuka BUKAN null dan BUKAN "Tanaman Bunga Matahari", tandai ref sebagai true
   const handleSetActiveModel = (model: string | null) => {
     if (model !== null && model !== "Tanaman Bunga Matahari") {
       hasOpenedOtherModalRef.current = true;
@@ -112,15 +108,12 @@ function HomeContent() {
     setActiveModel(model);
   };
 
-  // 3. Handler khusus untuk membuka Gift
   const handleOpenGift = (open: boolean) => {
     if (open) {
-      // Hanya izinkan buka jika user SUDAH pernah membuka modal lain
       if (hasOpenedOtherModalRef.current) {
         setIsGiftOpen(true);
       } else {
         console.log("Harus membuka modal lain terlebih dahulu!");
-        // Kamu juga bisa menambahkan alert/toast di sini jika mau
       }
     } else {
       setIsGiftOpen(false);
@@ -144,7 +137,6 @@ function HomeContent() {
   };
 
   const handleOpenPhoneModal = () => {
-    // Membuka Handphone juga dihitung sebagai membuka modal lain
     hasOpenedOtherModalRef.current = true;
     setWasPlayingBeforeModal(isPlaying);
 
@@ -173,7 +165,6 @@ function HomeContent() {
     setWasPlayingBeforeModal(false);
   };
 
-  // RENDER HALAMAN 404
   if (renderNotFound) {
     return (
       <div style={{ position: "relative", minHeight: "100vh", backgroundColor: "#000000" }}>
@@ -252,18 +243,21 @@ function HomeContent() {
           setIsInteracting={setIsInteracting}
         />
 
+        {/* FOOTER "Made with 🤍 for my bini" DI TENGAH BAWAH */}
         <div
           style={{
             position: "fixed",
             bottom: "16px",
             left: "50%",
             transform: "translateX(-50%)",
+            height: "28px",
+            boxSizing: "border-box",
             backgroundColor: "rgba(255, 255, 255, 0.15)",
             backdropFilter: "blur(10px)",
             WebkitBackdropFilter: "blur(10px)",
             border: "1px solid rgba(255, 255, 255, 0.3)",
             borderRadius: "9999px",
-            padding: "5px 14px",
+            padding: "0 14px",
             display: "flex",
             alignItems: "center",
             gap: "5px",
@@ -287,6 +281,55 @@ function HomeContent() {
           </span>
           <span>for my bini</span>
         </div>
+
+        {/* TOMBOL MUTE / PLAY AUDIO DI KANAN BAWAH (HANYA IKON) */}
+        <button
+        onClick={togglePlay}
+        aria-label={isPlaying ? "Mute audio" : "Play audio"}
+        style={{
+            position: "fixed",
+            bottom: "16px",
+            right: "16px",
+            width: "28px",
+            height: "28px",
+            backgroundColor: "rgba(255, 255, 255, 0.15)",
+            backdropFilter: "blur(10px)",
+            WebkitBackdropFilter: "blur(10px)",
+            border: "1px solid rgba(255, 255, 255, 0.3)",
+            borderRadius: "9999px",
+            padding: "0",
+            display: "flex",
+            alignItems: "center",
+            justifyContent: "center",
+            color: "#ffffff",
+            cursor: "pointer",
+            boxShadow: "0 4px 20px rgba(0, 0, 0, 0.15)",
+            zIndex: 50,
+            transition: "all 0.15s ease",
+            opacity: isInteracting || isAnyModalOpen ? 0 : 1,
+            pointerEvents: isInteracting || isAnyModalOpen ? "none" : "auto",
+        }}
+        onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.90)")}
+        onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
+        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+        onTouchStart={(e) => (e.currentTarget.style.transform = "scale(0.90)")}
+        onTouchEnd={(e) => (e.currentTarget.style.transform = "scale(1)")}
+        >
+        {isPlaying ? (
+            /* Ikon Speaker Aktif / Volume On */
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            </svg>
+        ) : (
+            /* Ikon Speaker Mute / Off */
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <line x1="1" y1="1" x2="23" y2="23"></line>
+            <path d="M9 9v6a3 3 0 0 0 5.12 2.12M15 9.34V4a2 2 0 0 0-3.54-1.3L8.68 5.48"></path>
+            <path d="M17 11a5 5 0 0 1 0 2M19 7a9 9 0 0 1 0 10"></path>
+            </svg>
+        )}
+        </button>
       </main>
 
       <ModalContainer
