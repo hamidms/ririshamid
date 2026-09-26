@@ -283,15 +283,16 @@ function HomeContent() {
         </div>
 
         {/* TOMBOL MUTE / PLAY AUDIO DI KANAN BAWAH (HANYA IKON) */}
+        {/* TOMBOL MUTE / PLAY AUDIO DI KANAN BAWAH (HANYA IKON) */}
         <button
-        onClick={togglePlay}
-        aria-label={isPlaying ? "Mute audio" : "Play audio"}
-        style={{
+          onClick={togglePlay}
+          aria-label={isPlaying ? "Mute audio" : "Play audio"}
+          style={{
             position: "fixed",
             bottom: "16px",
             right: "16px",
-            width: "28px",
-            height: "28px",
+            width: "36px", // Diperbesar dari 28px ke 36px
+            height: "36px", // Diperbesar dari 28px ke 36px
             backgroundColor: "rgba(255, 255, 255, 0.15)",
             backdropFilter: "blur(10px)",
             WebkitBackdropFilter: "blur(10px)",
@@ -308,27 +309,27 @@ function HomeContent() {
             transition: "all 0.15s ease",
             opacity: isInteracting || isAnyModalOpen ? 0 : 1,
             pointerEvents: isInteracting || isAnyModalOpen ? "none" : "auto",
-        }}
-        onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.90)")}
-        onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
-        onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
-        onTouchStart={(e) => (e.currentTarget.style.transform = "scale(0.90)")}
-        onTouchEnd={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          }}
+          onMouseDown={(e) => (e.currentTarget.style.transform = "scale(0.90)")}
+          onMouseUp={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          onMouseLeave={(e) => (e.currentTarget.style.transform = "scale(1)")}
+          onTouchStart={(e) => (e.currentTarget.style.transform = "scale(0.90)")}
+          onTouchEnd={(e) => (e.currentTarget.style.transform = "scale(1)")}
         >
-        {isPlaying ? (
+          {isPlaying ? (
             /* Ikon Speaker Aktif / Volume On */
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
-            <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <polygon points="11 5 6 9 2 9 2 15 6 15 11 19 11 5"></polygon>
+              <path d="M19.07 4.93a10 10 0 0 1 0 14.14M15.54 8.46a5 5 0 0 1 0 7.07"></path>
             </svg>
-        ) : (
+          ) : (
             /* Ikon Speaker Mute / Off */
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-            <line x1="1" y1="1" x2="23" y2="23"></line>
-            <path d="M9 9v6a3 3 0 0 0 5.12 2.12M15 9.34V4a2 2 0 0 0-3.54-1.3L8.68 5.48"></path>
-            <path d="M17 11a5 5 0 0 1 0 2M19 7a9 9 0 0 1 0 10"></path>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+              <line x1="1" y1="1" x2="23" y2="23"></line>
+              <path d="M9 9v6a3 3 0 0 0 5.12 2.12M15 9.34V4a2 2 0 0 0-3.54-1.3L8.68 5.48"></path>
+              <path d="M17 11a5 5 0 0 1 0 2M19 7a9 9 0 0 1 0 10"></path>
             </svg>
-        )}
+          )}
         </button>
       </main>
 
