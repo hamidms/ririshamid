@@ -10,7 +10,7 @@ export default function RingModel({ onSelect }: ModelProps) {
   return (
     <primitive 
       object={scene} 
-      scale={0.2}
+      scale={0.35}
       onClick={(e: any) => {
         e.stopPropagation(); 
         onSelect();

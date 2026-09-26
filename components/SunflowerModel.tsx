@@ -10,7 +10,7 @@ export default function SunflowerModel({ onSelect }: ModelProps) {
   return (
     <primitive 
       object={scene} 
-      scale={0.7}
+      scale={0.9}
       onClick={(e: any) => {
         e.stopPropagation(); 
         onSelect();

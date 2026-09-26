@@ -119,8 +119,8 @@ export default function Scene3D({
 
       <OrthographicCamera
         makeDefault
-        position={[8, 18, 10]}
-        zoom={85}
+        position={[20, 20, 20]}
+        zoom={70}
         near={0.1}
         far={1000}
       />
@@ -130,27 +130,27 @@ export default function Scene3D({
 
       {/* Suspense akan merender model secara bertahap saat kodenya selesai di-download */}
       <Suspense fallback={null}>
-        <group position={[0, -3, 0]}>
+        <group position={[0, -2, 0]}>
           <GrassModel />
         </group>
 
-        <group position={[0.1, -2, 0.2]} rotation={[0, 0, 0]}>
+        <group position={[0.7, -0.85, 0]} rotation={[0, -0.5, 0]}>
           <ShoesModel onSelect={() => setActiveModel("Couple")} />
         </group>
 
-        <group position={[-1, -2, 0.2]} rotation={[0, 1, 0]}>
+        <group position={[-0.5, -0.85, 0]} rotation={[0, 0.5, 0]}>
           <HeelsModel onSelect={() => setActiveModel("Couple")} />
         </group>
 
-        <group position={[1.8, -2, -1]} rotation={[0, -0.5, 0]}>
+        <group position={[1.7, -1.5, -1]} rotation={[-1.2, -0.7, -1]}>
           <BookModel onSelect={() => setActiveModel("Book")} />
         </group>
 
-        <group position={[1.8, -2.2, 0.5]} rotation={[Math.PI / 2, 3, Math.PI / 3]}>
+        <group position={[1.4, -1.5, 1]} rotation={[0, 1, 0]}>
           <PhoneModel onSelect={handleOpenPhoneModal} />
         </group>
 
-        <group position={[0, -2.4, -1.2]}>
+        <group position={[-1.6, -1.3, -1.2]} rotation={[-1.7, 0.5, 2.1]}>
           <SunflowerModel
             onSelect={() => {
               setActiveModel("Tanaman Bunga Matahari");
@@ -159,15 +159,15 @@ export default function Scene3D({
           />
         </group>
 
-        <group position={[-1, -2, 0.5]} rotation={[0, 0, 1.5]}>
+        <group position={[0, -1.4, -1.5]} rotation={[1.7, 0, 0]}>
           <HeadphoneModel onSelect={() => setActiveModel("Headphone")} />
         </group>
 
-        <group position={[-2, -2.3, 1.5]} rotation={[0, 1, 0]}>
+        <group position={[-1.2, -1.6, 1.2]} rotation={[0, -0.6, 0]}>
           <CalendarModel onSelect={() => setActiveModel("Calendar")} />
         </group>
 
-        <group position={[0.4, -2.3, 1]} rotation={[0, 0, 0]}>
+        <group position={[0.05, -1.2, 1]} rotation={[0, 0, 0]}>
           <RingModel onSelect={() => setActiveModel("Ring")} />
         </group>
       </Suspense>

@@ -10,7 +10,7 @@ export default function ShoesModel({ onSelect }: ModelProps) {
   return (
     <primitive 
       object={scene} 
-      scale={1}
+      scale={0.8}
       onClick={(e: any) => {
         e.stopPropagation(); 
         onSelect();

@@ -12,7 +12,7 @@ export default function PhoneModel({ onSelect }: ModelProps) {
   return (
     <primitive 
       object={scene} 
-      scale={0.2}
+      scale={0.6}
       onClick={(e: any) => {
         // StopPropagation krusial agar klik tidak tembus ke rumput/model lain di belakangnya
         e.stopPropagation(); 
